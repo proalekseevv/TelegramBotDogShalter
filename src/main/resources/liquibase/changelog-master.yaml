@@ -1,0 +1,6 @@
+databaseChangeLog:
+  - include:
+      relativeToChangeLogFile: true
+      file: script/usersContacts.sql
+
+
