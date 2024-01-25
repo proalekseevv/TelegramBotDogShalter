@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @EqualsAndHashCode(exclude = "id")
+@Builder
 @Setter
 @Getter
 @NoArgsConstructor
@@ -16,7 +17,6 @@ public class UsersContactInformation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
 
     @Column(name = "chat_id")
     private long chatId;
