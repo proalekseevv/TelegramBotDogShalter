@@ -1,9 +1,7 @@
 package ru.skypro.telegrambotdogshelter.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.skypro.telegrambotdogshelter.models.DTO.ShelterDto;
 import ru.skypro.telegrambotdogshelter.models.DTO.ShelterInfoDto;
-import ru.skypro.telegrambotdogshelter.models.Shelter;
 import ru.skypro.telegrambotdogshelter.models.ShelterInfo;
 
 @Component

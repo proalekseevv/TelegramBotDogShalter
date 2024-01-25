@@ -1,25 +1,16 @@
 package ru.skypro.telegrambotdogshelter.services.impl;
 
-import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
-import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
-import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.exceptions.ShelterIsNotExistsException;
 import ru.skypro.telegrambotdogshelter.mapper.ShelterInfoMapper;
-import ru.skypro.telegrambotdogshelter.mapper.ShelterMapper;
-import ru.skypro.telegrambotdogshelter.models.DAO.ShelterDao;
 import ru.skypro.telegrambotdogshelter.models.DAO.ShelterInfoDao;
-import ru.skypro.telegrambotdogshelter.models.DTO.ShelterDto;
 import ru.skypro.telegrambotdogshelter.models.DTO.ShelterInfoDto;
-import ru.skypro.telegrambotdogshelter.models.Shelter;
 import ru.skypro.telegrambotdogshelter.models.ShelterInfo;
 import ru.skypro.telegrambotdogshelter.repository.ShelterInfoRepository;
-import ru.skypro.telegrambotdogshelter.repository.ShelterRepository;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterInfoService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
