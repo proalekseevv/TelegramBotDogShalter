@@ -1,9 +1,6 @@
 package ru.skypro.telegrambotdogshelter.services.interfaces;
 
-import ru.skypro.telegrambotdogshelter.exceptions.ShelterIsNotExistsException;
-import ru.skypro.telegrambotdogshelter.models.DTO.ShelterDto;
 import ru.skypro.telegrambotdogshelter.models.DTO.ShelterInfoDto;
-import ru.skypro.telegrambotdogshelter.models.ShelterInfo;
 
 import java.util.List;
 

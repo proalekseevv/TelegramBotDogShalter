@@ -1,6 +1,5 @@
 package ru.skypro.telegrambotdogshelter.models.DAO;
 
-import ru.skypro.telegrambotdogshelter.models.Shelter;
 import ru.skypro.telegrambotdogshelter.models.ShelterInfo;
 
 import java.util.List;

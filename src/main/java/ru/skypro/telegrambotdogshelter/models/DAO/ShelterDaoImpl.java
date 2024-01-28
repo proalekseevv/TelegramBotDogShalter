@@ -3,12 +3,11 @@ package ru.skypro.telegrambotdogshelter.models.DAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.mapper.ShelterMapper;
-import ru.skypro.telegrambotdogshelter.models.DTO.ShelterDto;
 import ru.skypro.telegrambotdogshelter.models.Shelter;
 import ru.skypro.telegrambotdogshelter.repository.ShelterRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ShelterDaoImpl implements ShelterDao {

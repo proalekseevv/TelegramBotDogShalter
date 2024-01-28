@@ -140,6 +140,15 @@ public class BotManagementService {
      * @param chatId Идентификатор чата, куда отправляется сообщение.
      */
     public void sendSheltersMenu(Long chatId) {
+
+        // Отправка приветственного сообщения
+        SendResponse response2 = telegramBot.execute(new SendMessage(chatId, "Привет! Я помогаю взаимодействовать с приютами для собачек"));
+
+    }
+
+
+
+    public void sendSheltersMenu4(Long chatId) {
         List<ShelterDto> shelters = shelterService.getAll();
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
@@ -149,13 +158,22 @@ public class BotManagementService {
             inlineKeyboardMarkup.addRow(new InlineKeyboardButton(shelter.getName()).callbackData("showShelterInfo_" + shelter.getId()));
         }
 
-        // Отправка приветственного сообщения
-        SendResponse response2 = telegramBot.execute(new SendMessage(chatId, "Привет! Я помогаю взаимодействовать с приютами для собачек"));
-
         // Отправка сообщения со списком приютов и кнопками
         SendResponse response = telegramBot.execute(new SendMessage(chatId, "Выберите приют:")
                 .replyMarkup(inlineKeyboardMarkup));
 
         logger.info("SendSheltersMenu response: {}", response);
+    }
+
+
+
+    public void sendBackToSheltersButton3(Long chatId) {
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Меню приюта").callbackData("show"));
+
+
+        telegramBot.execute(new SendMessage(chatId, "Открыть:").replyMarkup(inlineKeyboardMarkup));
     }
 }
