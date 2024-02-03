@@ -12,6 +12,7 @@ public class ShelterInfoDto {
     private String phoneNumber;
     private String email;
     private String infoPets;
+    private String workSchedule;
 
 
     public ShelterInfoDto(Long id, String info, String phoneNumber, String email, String infoPets) {
@@ -20,6 +21,7 @@ public class ShelterInfoDto {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.infoPets = infoPets;
+        this.workSchedule = workSchedule;
     }
 
     public ShelterInfoDto() {

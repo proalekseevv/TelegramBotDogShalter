@@ -77,6 +77,8 @@ public class BotManagementService {
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Как взять животное из приюта").callbackData("takePet_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("sendReport_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Позвать волонтера").callbackData("callVolunteer_" + shelterInfo.getId()));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Расписание работы приюта").callbackData("workSchedule_" + shelterInfo.getId()));
+//        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Схема проезда").callbackData("drivingDirections_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
 
         // Отправка сообщения с клавиатурой
@@ -99,6 +101,26 @@ public class BotManagementService {
 
             // Формирование текста сообщения с информацией о том, как взять животное из приюта
             String shelterInfoMessage = "Как взять животное из приюта: " + "\n" + shelterInfo.getInfoPets();
+            // Отправка сообщения с информацией о приюте
+            telegramBot.execute(new SendMessage(chatId, shelterInfoMessage));
+        } catch (ShelterIsNotExistsException e) {
+            // Обработка ошибки, если приют не найден
+            logger.error("Error while reading shelter with ID: {}", shelterId, e);
+            telegramBot.execute(new SendMessage(chatId, "Извините, информация о приюте недоступна."));
+        }
+    }
+    /**
+     * Метод для отправки текстового сообщения с информацией о расписание работы приюта.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     * @param shelterId Идентификатор приюта, информацию о котором нужно отправить.
+     */
+    public void sendShelterWorkScheduleText(Long chatId, long shelterId) {
+        try {
+            ShelterInfoDto shelterInfo = shelterInfoService.read(shelterId);
+
+            // Формирование текста сообщения с информацией о том, как взять животное из приюта
+            String shelterInfoMessage = "Расписание работы приюта: " + "\n" + shelterInfo.getWorkSchedule();
             // Отправка сообщения с информацией о приюте
             telegramBot.execute(new SendMessage(chatId, shelterInfoMessage));
         } catch (ShelterIsNotExistsException e) {

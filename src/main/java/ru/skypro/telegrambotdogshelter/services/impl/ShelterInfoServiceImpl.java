@@ -72,6 +72,7 @@ public class ShelterInfoServiceImpl implements ShelterInfoService {
             ShelterInfo shelterInfo = repository.findById(id).orElseThrow(ShelterIsNotExistsException::new);
             shelterInfo.setId(id);
             shelterInfo.setInfo(dto.getInfo());
+            shelterInfo.setWorkSchedule(dto.getWorkSchedule());
             shelterInfo.setInfoPets(dto.getInfoPets());
             shelterInfo.setEmail(dto.getEmail());
             shelterInfo.setPhoneNumber(dto.getPhoneNumber());
