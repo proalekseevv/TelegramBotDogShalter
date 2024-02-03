@@ -41,7 +41,20 @@ public class ShelterInfo {
     @Type(type = "org.hibernate.type.TextType")
     private String infoPets;
 
+    @Column(name = "work_schedule", nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
+    private String workSchedule;
 
+
+
+
+    public String getWorkSchedule() {
+        return workSchedule;
+    }
+
+    public void setWorkSchedule(String workSchedule) {
+        this.info = info;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -41,6 +41,7 @@ public class ShelterInfoDaoImpl implements ShelterInfoDao {
             existingShelter.setInfoPets(shelterInfo.getInfoPets());
             existingShelter.setPhoneNumber(shelterInfo.getPhoneNumber());
             existingShelter.setEmail(shelterInfo.getEmail());
+            existingShelter.setWorkSchedule(shelterInfo.getWorkSchedule());
             // Другие обновления полей
             return repository.save(existingShelter);
         }
