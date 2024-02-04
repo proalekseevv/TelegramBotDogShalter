@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+
 public class ShelterInfoDto {
 
     private Long id;
@@ -23,5 +24,8 @@ public class ShelterInfoDto {
     }
 
     public ShelterInfoDto() {
+
     }
+
+
 }

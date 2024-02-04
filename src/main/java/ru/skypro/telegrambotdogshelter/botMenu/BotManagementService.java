@@ -3,6 +3,7 @@ package ru.skypro.telegrambotdogshelter.botMenu;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,23 +18,28 @@ import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
 
 import java.util.List;
 
+
+
 /**
  * Класс BotManagementService представляет собой сервис для управления ботом Telegram, включая отправку сообщений и формирование клавиатур.
  */
 @Service
-@RequiredArgsConstructor // Генерирует конструктор, внедряющий зависимости (dependency injection), для всех полей класса, которые помечены аннотацией final
+@RequiredArgsConstructor
+// Генерирует конструктор, внедряющий зависимости (dependency injection), для всех полей класса, которые помечены аннотацией final
 public class BotManagementService {
 
-    // Экземпляр TelegramBot для отправки сообщений
+    //     Экземпляр TelegramBot для отправки сообщений
     private final TelegramBot telegramBot;
 
-    // Экземпляр ShelterInfoService для получения информации о приюте
+    //     Экземпляр ShelterInfoService для получения информации о приюте
     private final ShelterInfoService shelterInfoService;
 
     private final ShelterService shelterService;
 
-    // Логгер
-    private final Logger logger = LoggerFactory.getLogger(BotManagementService.class);
+
+    //     Логгер
+    private final static Logger logger = LoggerFactory.getLogger(BotManagementService.class);
+
 
     /**
      * Метод для отправки текстового сообщения с информацией о приюте.
@@ -76,7 +82,7 @@ public class BotManagementService {
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Узнать информацию о приюте").callbackData("info_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Как взять животное из приюта").callbackData("takePet_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("sendReport_" + shelterInfo.getId()));
-        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Позвать волонтера").callbackData("callVolunteer_" + shelterInfo.getId()));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Позвать волонтера").callbackData("callVolunteer"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
 
         // Отправка сообщения с клавиатурой
@@ -107,7 +113,6 @@ public class BotManagementService {
             telegramBot.execute(new SendMessage(chatId, "Извините, информация о приюте недоступна."));
         }
     }
-
 
 
     /**
@@ -158,4 +163,63 @@ public class BotManagementService {
 
         logger.info("SendSheltersMenu response: {}", response);
     }
+
+
+    public void processUserRequest(Long chatId, Long volunteerChatId) {
+
+        button(chatId);
+
+        logger.info("Отправляем пользователю ссылку на подключение к боту");
+
+        callVolunteer(volunteerChatId);
+    }
+
+
+    private static Keyboard keyboardMarkup() {
+        final String url = "https://t.me/+aptCEg65ORBhYzk6";
+        InlineKeyboardButton button = new InlineKeyboardButton("Ссылка на чат с волонтером");
+        button.url(url);
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup(button);
+        return markup;
+    }
+
+    public void callVolunteer(Long targetChatId) {
+
+        SendMessage request = new SendMessage(targetChatId, "Внимание! К тебе подключается пользователь");
+        telegramBot.execute(request);
+        logger.info("Отправка волонтеру сообщения о присоединении нового пользователя ");
+    }
+
+
+    public void button(Long chatId) {
+
+
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
+                new InlineKeyboardButton[]{
+                        new InlineKeyboardButton("Перейти в чат с волонтером").url("https://t.me/+aptCEg65ORBhYzk6")
+                }
+        );
+
+        SendMessage message = new SendMessage(chatId, " Вызвать волонтера");
+        message.replyMarkup(markup);
+
+        telegramBot.execute(message);
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
