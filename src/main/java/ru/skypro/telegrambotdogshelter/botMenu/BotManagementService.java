@@ -206,7 +206,6 @@ public class BotManagementService {
 
     public void button(Long chatId) {
 
-
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
                 new InlineKeyboardButton[]{
                         new InlineKeyboardButton("Перейти в чат с волонтером").url("https://t.me/+aptCEg65ORBhYzk6")

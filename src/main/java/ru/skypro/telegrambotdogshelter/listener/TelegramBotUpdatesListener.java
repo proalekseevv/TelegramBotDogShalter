@@ -68,6 +68,7 @@ public class TelegramBotUpdatesListener {
             // Обработка команды /start
             // Отправка пользователю меню с приютами
             service.sendSheltersMenu(update.message().chat().id());
+            service.sendSheltersMenu4(update.message().chat().id());
         }
     }
 
