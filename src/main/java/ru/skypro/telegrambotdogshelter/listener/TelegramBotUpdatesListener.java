@@ -67,12 +67,18 @@ public class TelegramBotUpdatesListener {
             Long chatId = update.callbackQuery().message().chat().id();
             // Обработка данных и идентификатора чата
             handleCallbackData(update, callbackData, chatId);
+
+
         } else if (update.message() != null && "/start".equals(update.message().text())) {
             // Обработка команды /start
             // Отправка пользователю меню с приютами
+
             service.sendSheltersMenu(update.message().chat().id());
             service.sendBackToSheltersButton3(update.message().chat().id());
+
         }
+
+
     }
 
 
@@ -136,13 +142,8 @@ public class TelegramBotUpdatesListener {
             case "sendUserInfo":
                 // Вопросы о том, какую информацию нужно предоставить для связи
                 shelterId = callbackData.replace("sendUserInfo_", "");
-                telegramBot.execute(new SendMessage(chatId,
-                        "Как к вам обращаться? Введите фамилию и имя:"));
-                userService.saveUserInfo(update);
 
-                //service.sendShelterInfoPetsText(chatId, Long.parseLong(shelterId));
-                // Отображение кнопки "Назад"
-                //service.sendBackToSheltersButton2(chatId);
+
                 break;
 
 

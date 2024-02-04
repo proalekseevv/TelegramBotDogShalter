@@ -1,6 +1,7 @@
 package ru.skypro.telegrambotdogshelter.botMenu;
 
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -14,11 +15,15 @@ import ru.skypro.telegrambotdogshelter.models.DTO.ShelterDto;
 import ru.skypro.telegrambotdogshelter.models.DTO.ShelterInfoDto;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterInfoService;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
+import ru.skypro.telegrambotdogshelter.services.interfaces.UsersContactInfoService;
 
 import java.util.List;
 
+import static liquibase.repackaged.net.sf.jsqlparser.parser.feature.Feature.update;
+
 /**
- * Класс BotManagementService представляет собой сервис для управления ботом Telegram, включая отправку сообщений и формирование клавиатур.
+ * Класс BotManagementService представляет собой сервис для управления ботом Telegram,
+ * включая отправку сообщений и формирование клавиатур.
  */
 @Service
 @RequiredArgsConstructor // Генерирует конструктор, внедряющий зависимости (dependency injection), для всех полей класса, которые помечены аннотацией final
@@ -31,6 +36,8 @@ public class BotManagementService {
     private final ShelterInfoService shelterInfoService;
 
     private final ShelterService shelterService;
+
+    private final UsersContactInfoService usersService;
 
     // Логгер
     private final Logger logger = LoggerFactory.getLogger(BotManagementService.class);
@@ -75,6 +82,7 @@ public class BotManagementService {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Узнать информацию о приюте").callbackData("info_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Как взять животное из приюта").callbackData("takePet_" + shelterInfo.getId()));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Отправить контактные данные").callbackData("sendUserInfo_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("sendReport_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Позвать волонтера").callbackData("callVolunteer_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
@@ -142,7 +150,8 @@ public class BotManagementService {
     public void sendSheltersMenu(Long chatId) {
 
         // Отправка приветственного сообщения
-        SendResponse response2 = telegramBot.execute(new SendMessage(chatId, "Привет! Я помогаю взаимодействовать с приютами для собачек"));
+        SendResponse response2 = telegramBot.execute(new SendMessage(chatId,
+                "Привет! Я помогаю взаимодействовать с приютами для собачек"));
 
     }
 
@@ -155,7 +164,8 @@ public class BotManagementService {
 
         // Создание кнопок для каждого приюта
         for (ShelterDto shelter : shelters) {
-            inlineKeyboardMarkup.addRow(new InlineKeyboardButton(shelter.getName()).callbackData("showShelterInfo_" + shelter.getId()));
+            inlineKeyboardMarkup.addRow(new InlineKeyboardButton(shelter.getName())
+                    .callbackData("showShelterInfo_" + shelter.getId()));
         }
 
         // Отправка сообщения со списком приютов и кнопками
@@ -176,4 +186,8 @@ public class BotManagementService {
 
         telegramBot.execute(new SendMessage(chatId, "Открыть:").replyMarkup(inlineKeyboardMarkup));
     }
+
+
+
+
 }

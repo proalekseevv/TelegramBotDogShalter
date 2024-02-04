@@ -32,12 +32,16 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
     // Сохранение контактных данных пользователя
     @Override
     public void saveUserInfo(Update update) {
+        long chatId = update.message().chat().id();
+        telegramBot.execute(new SendMessage(chatId,
+                "Как к вам обращаться? Введите фамилию и имя:"));
+
         // если отправлено пустое сообщение.
         if (update.message() == null) {
             logger.info("Отправлено пустое сообщение.");
             return;
         }
-        long chatId = update.message().chat().id();
+
         String userMessage = update.message().text();
 
         if (userMessage == null) {
@@ -45,7 +49,7 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
                     "Нужно ввести фамилию и имя русскими буквами."));
             return;
         }
-
+    // Проверка сообщения на соответствие регулярному выражению
         Matcher matcher = MESSAGE_PATTERN.matcher(userMessage);
 
         if (matcher.find()) {
@@ -54,13 +58,9 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
         } else {
             telegramBot.execute(new SendMessage(chatId,
                     "Некорректные данные. Введите фамилию и имя."));
-            return;
-        }
+                    }
 
-       // String surname = matcher.group(1);
-       // String name = matcher.group(3);
 
-        return;
     }
 
 
