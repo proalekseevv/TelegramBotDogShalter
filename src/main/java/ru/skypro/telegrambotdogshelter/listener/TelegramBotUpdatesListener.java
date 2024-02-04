@@ -111,7 +111,7 @@ public class TelegramBotUpdatesListener {
             case "backToShelters":
                 // Возвращение к списку приютов
                 shelterId = callbackData.replace("backToShelters", "");
-                service.sendSheltersMenu(chatId);
+                service.sendSheltersMenu4(chatId);
                 break;
             case "backToShelters2":
                 // Возвращение к меню приюта после дополнительного действия
@@ -129,6 +129,8 @@ public class TelegramBotUpdatesListener {
                 final  Long targetChatId = -4197641181L;
 
                 service.processUserRequest(chatId, targetChatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToSheltersButton2(chatId);
 
 
                 break;
