@@ -1,8 +1,6 @@
 package ru.skypro.telegrambotdogshelter.models.DTO;
 
 
-import java.util.Objects;
-
 public class ShelterDto {
     private  Long id;
 

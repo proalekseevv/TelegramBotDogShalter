@@ -3,6 +3,8 @@ package ru.skypro.telegrambotdogshelter.listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ import java.util.List;
  * Класс TelegramBotUpdatesListener является слушателем обновлений Telegram бота и обрабатывает полученные обновления.
  */
 @Service
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class TelegramBotUpdatesListener {
 
     // Экземпляр TelegramBot для взаимодействия с ботом
@@ -30,20 +32,9 @@ public class TelegramBotUpdatesListener {
     // Экземпляр BotManagementService для обработки обновлений и отправки сообщений
     private final BotManagementService service;
 
-    private final UsersContactInfoService usersContactInfoService;
-
 
     // Логгер
     private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
-
-
-
-    public TelegramBotUpdatesListener(TelegramBot telegramBot, ShelterService shelterService, BotManagementService service, UsersContactInfoService usersContactInfoService) {
-        this.telegramBot = telegramBot;
-        this.shelterService = shelterService;
-        this.service = service;
-        this.usersContactInfoService = usersContactInfoService;
-    }
 
     /**
      * Метод, вызываемый после создания экземпляра класса. Устанавливает слушателя обновлений бота.
@@ -82,8 +73,6 @@ public class TelegramBotUpdatesListener {
 
 
 
-
-
     /**
      * Метод обработки данных callback и выполнения соответствующих действий.
      *
@@ -92,9 +81,6 @@ public class TelegramBotUpdatesListener {
      */
     private void handleCallbackData(Update update, String callbackData, Long chatId) {
         String shelterId;
-
-
-
 
         // Разделяем строку callbackData по символу '_' и берем первый элемент (индекс 0),
         // который представляет собой тип действия пользователя.

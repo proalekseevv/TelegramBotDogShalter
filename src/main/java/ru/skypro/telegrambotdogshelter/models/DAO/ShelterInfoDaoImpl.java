@@ -4,7 +4,6 @@ package ru.skypro.telegrambotdogshelter.models.DAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.mapper.ShelterInfoMapper;
-import ru.skypro.telegrambotdogshelter.models.Shelter;
 import ru.skypro.telegrambotdogshelter.models.ShelterInfo;
 import ru.skypro.telegrambotdogshelter.repository.ShelterInfoRepository;
 
