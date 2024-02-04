@@ -3,7 +3,7 @@ package ru.skypro.telegrambotdogshelter.listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +14,11 @@ import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
 import ru.skypro.telegrambotdogshelter.services.interfaces.UsersContactInfoService;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 
 /**
- * Класс TelegramBotUpdatesListener является слушателем обновлений Telegram бота
- * и обрабатывает полученные обновления.
+ * Класс TelegramBotUpdatesListener является слушателем обновлений Telegram бота и обрабатывает полученные обновления.
  */
 @Service
 @RequiredArgsConstructor
@@ -39,8 +39,7 @@ public class TelegramBotUpdatesListener {
     private final UsersContactInfoService userService;
 
     /**
-     * Метод, вызываемый после создания экземпляра класса.
-     * Устанавливает слушателя обновлений бота.
+     * Метод, вызываемый после создания экземпляра класса. Устанавливает слушателя обновлений бота.
      */
     @PostConstruct
     public void init() {
@@ -67,19 +66,14 @@ public class TelegramBotUpdatesListener {
             Long chatId = update.callbackQuery().message().chat().id();
             // Обработка данных и идентификатора чата
             handleCallbackData(update, callbackData, chatId);
-
-
         } else if (update.message() != null && "/start".equals(update.message().text())) {
             // Обработка команды /start
             // Отправка пользователю меню с приютами
-
             service.sendSheltersMenu(update.message().chat().id());
-            service.sendBackToSheltersButton3(update.message().chat().id());
-
+            service.sendSheltersMenu4(update.message().chat().id());
         }
-
-
     }
+
 
 
     /**
@@ -133,10 +127,15 @@ public class TelegramBotUpdatesListener {
                     logger.error("Error parsing shelterId from callbackData: {}", callbackData, e);
                 }
                 break;
-            case "show":
-                // Отображение меню с информацией о приюте
-                shelterId = callbackData.replace("show", "");
-                service.sendSheltersMenu4(chatId);
+
+            case "callVolunteer":
+                final  Long targetChatId = -4197641181L;
+
+                service.processUserRequest(chatId, targetChatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToSheltersButton2(chatId);
+
+
                 break;
 
             case "sendUserInfo":
@@ -154,22 +153,15 @@ public class TelegramBotUpdatesListener {
 
 
     //callbackQuery() -
-    //это метод в библиотеке Telegram Bot API (Pengrad Telegram Bot API), который предоставляет доступ к объекту
-    // CallbackQuery в обновлении бота.
-    //Объект CallbackQuery содержит информацию о пользовательском взаимодействии с кнопками встроенной клавиатуры,
-    // которые часто используются для создания меню в Telegram ботах.
+    //это метод в библиотеке Telegram Bot API (Pengrad Telegram Bot API), который предоставляет доступ к объекту CallbackQuery в обновлении бота.
+    //Объект CallbackQuery содержит информацию о пользовательском взаимодействии с кнопками встроенной клавиатуры, которые часто используются для создания меню в Telegram ботах.
     //
-    //Когда пользователь нажимает на кнопку с встроенной клавиатуры, бот получает CallbackQuery,
-    // который содержит информацию о нажатой кнопке, чате и дополнительные данные. В вашем коде, например,
-    // вы используете update.callbackQuery().data() для получения данных, связанных с действием пользователя.
+    //Когда пользователь нажимает на кнопку с встроенной клавиатуры, бот получает CallbackQuery, который содержит информацию о нажатой кнопке, чате и дополнительные данные. В вашем коде, например, вы используете update.callbackQuery().data() для получения данных, связанных с действием пользователя.
 
     /*
     shelterId = callbackData.replace("showShelterInfo_", "");
-    В данной строке кода выполняется замена подстроки "showShelterInfo_" в строке callbackData на пустую строку.
-    Результат этой операции присваивается переменной shelterId.
-    Таким образом, мы извлекаем идентификатор приюта из строки callbackData, удаляя префикс "showShelterInfo_".
-    Этот идентификатор приюта затем используется в дальнейших операциях, например, при вызове
-    метода service.sendShelterInfoMenu(chatId, Long.parseLong(shelterId))
+    В данной строке кода выполняется замена подстроки "showShelterInfo_" в строке callbackData на пустую строку. Результат этой операции присваивается переменной shelterId.
+    Таким образом, мы извлекаем идентификатор приюта из строки callbackData, удаляя префикс "showShelterInfo_". Этот идентификатор приюта затем используется в дальнейших операциях, например, при вызове метода service.sendShelterInfoMenu(chatId, Long.parseLong(shelterId))
     replace в Java используется для замены всех вхождений указанной подстроки на другую подстроку в строке
      */
 }

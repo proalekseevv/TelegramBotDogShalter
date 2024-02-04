@@ -1,12 +1,13 @@
 package ru.skypro.telegrambotdogshelter.models;
 
 import lombok.*;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-
+@Component
 @EqualsAndHashCode(exclude = "id")
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users_contact_info")
@@ -15,7 +16,7 @@ public class UsersContactInformation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private long id;
 
 
     @Column(name = "chat_id")
@@ -39,12 +40,14 @@ public class UsersContactInformation {
 
     public UsersContactInformation(long chatId, String name, String surname, int age, long phoneNumber, String email) {
         this.chatId = chatId;
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.age = age;
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
+
 }
 
 
