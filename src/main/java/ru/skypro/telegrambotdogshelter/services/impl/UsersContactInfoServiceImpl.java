@@ -1,6 +1,8 @@
 package ru.skypro.telegrambotdogshelter.services.impl;
 
 import com.pengrad.telegrambot.TelegramBot;
+import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.exceptions.UserIdNotFoundException;
 import ru.skypro.telegrambotdogshelter.repository.UsersContactInfoRepository;
@@ -17,8 +19,10 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
 
     private final TelegramBot telegramBot;
     private final UsersContactInfoRepository userContactInformationRepository;
+    private Logger logger;
 
-@Override
+
+    @Override
     public UsersContactInformation createUserService(UsersContactInformation usersContactInformation) {
         logger.info("Was invoked method for create userContactInformation");
         return userContactInformationRepository.save(usersContactInformation);
@@ -31,40 +35,6 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
         return userContactInformationRepository.findById(id)
                 .orElseThrow(() ->
                         new UserIdNotFoundException("Пользователь не найден"));
-    }
-
-    // Сохранение контактных данных пользователя
-    @Override
-    public void saveUserInfo(Update update) {
-        long chatId = update.message().chat().id();
-        telegramBot.execute(new SendMessage(chatId,
-                "Как к вам обращаться? Введите фамилию и имя:"));
-
-        // если отправлено пустое сообщение.
-        if (update.message() == null) {
-            logger.info("Отправлено пустое сообщение.");
-            return;
-        }
-
-        String userMessage = update.message().text();
-
-        if (userMessage == null) {
-            telegramBot.execute(new SendMessage(chatId,
-                    "Нужно ввести фамилию и имя русскими буквами."));
-            return;
-        }
-    // Проверка сообщения на соответствие регулярному выражению
-        Matcher matcher = MESSAGE_PATTERN.matcher(userMessage);
-
-        if (matcher.find()) {
-            telegramBot.execute(new SendMessage(chatId,
-                    "Данные успешно записаны."));
-        } else {
-            telegramBot.execute(new SendMessage(chatId,
-                    "Некорректные данные. Введите фамилию и имя."));
-                    }
-
-
     }
 
 
