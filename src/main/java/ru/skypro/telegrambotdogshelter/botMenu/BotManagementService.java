@@ -140,7 +140,6 @@ public class BotManagementService {
      * @param chatId Идентификатор чата, куда отправляется сообщение.
      */
     public void sendSheltersMenu(Long chatId) {
-
         // Отправка приветственного сообщения
         SendResponse response2 = telegramBot.execute(new SendMessage(chatId, "Привет! Я помогаю взаимодействовать с приютами для собачек"));
 
@@ -206,7 +205,6 @@ public class BotManagementService {
 
 
     public void button(Long chatId) {
-
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
                 new InlineKeyboardButton[]{
