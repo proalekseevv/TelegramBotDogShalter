@@ -141,7 +141,7 @@ public class TelegramBotUpdatesListener {
             case "sendUserInfo":
                 // Вопросы о том, какую информацию нужно предоставить для связи
                 shelterId = callbackData.replace("sendUserInfo_", "");
-
+                userService.saveUserInfo(update);
 
                 break;
 
