@@ -4,6 +4,10 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import com.pengrad.telegrambot.model.request.Keyboard;
+import com.pengrad.telegrambot.model.request.KeyboardButton;
+import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
+import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,9 +75,13 @@ public class TelegramBotUpdatesListener {
             // Отправка пользователю меню с приютами
             service.sendSheltersMenu(update.message().chat().id());
             service.sendSheltersMenu4(update.message().chat().id());
+        } else if (update.message().contact() != null) {
+            logger.info("Запущена обработка контактных данных.");
+            userService.saveUserInfo(update);
         }
-    }
 
+
+    }
 
 
     /**
@@ -129,7 +137,7 @@ public class TelegramBotUpdatesListener {
                 break;
 
             case "callVolunteer":
-                final  Long targetChatId = -4197641181L;
+                final Long targetChatId = -4197641181L;
 
                 service.processUserRequest(chatId, targetChatId);
                 // Отображение кнопки "Назад"
@@ -141,11 +149,17 @@ public class TelegramBotUpdatesListener {
             case "sendUserInfo":
                 // Вопросы о том, какую информацию нужно предоставить для связи
                 shelterId = callbackData.replace("sendUserInfo_", "");
-                userService.saveUserInfo(update);
 
+                Keyboard keyboard = new ReplyKeyboardMarkup(
+                        new KeyboardButton[]{
+                                new KeyboardButton("text"),
+                                new KeyboardButton("contact").requestContact(true),
+                                new KeyboardButton("location").requestLocation(true)
+                        }
+
+                );
+                telegramBot.execute(new SendMessage(chatId, "Отправить данные:").replyMarkup(keyboard));
                 break;
-
-
 
 
             default:

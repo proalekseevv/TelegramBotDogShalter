@@ -49,8 +49,7 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
     @Override
     public void saveUserInfo(Update update) {
         long chatId = update.message().chat().id();
-        telegramBot.execute(new SendMessage(chatId,
-                "Как к вам обращаться? Введите фамилию и имя:"));
+
 
         // если отправлено пустое сообщение.
         if (update.message() == null) {
@@ -58,22 +57,21 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
             return;
         }
 
-        String userMessage = update.message().text();
+        String userFirstName = update.message().contact().firstName();
+        String userLastName = update.message().contact().lastName();
+        String userPhone = update.message().contact().phoneNumber();
 
-        if (userMessage == null) {
-            telegramBot.execute(new SendMessage(chatId,
-                    "Нужно ввести фамилию и имя русскими буквами."));
-            return;
-        }
+
         // Проверка сообщения на соответствие регулярному выражению
-        Matcher matcher = MESSAGE_PATTERN.matcher(userMessage);
+
+        // ДОРАБОТАТЬ ЛОГИКУ ОБРАБОТКИ
 
         if (matcher.find()) {
             telegramBot.execute(new SendMessage(chatId,
                     "Данные успешно записаны."));
         } else {
             telegramBot.execute(new SendMessage(chatId,
-                    "Некорректные данные. Введите фамилию и имя."));
+                    "Некорректные данные. Введите фамилию, имя и номер телефона."));
         }
 
 
