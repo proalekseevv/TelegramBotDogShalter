@@ -123,7 +123,6 @@ public class TelegramBotUpdatesListener {
                 // Отображение информации о расписание работы приюта
                 shelterId = callbackData.replace("workSchedule_", "");
                 service.sendShelterWorkScheduleText(chatId, Long.parseLong(shelterId));
-                // Отображение кнопки "Назад"
                 service.sendBackToSheltersButton2(chatId);
                 break;
 
