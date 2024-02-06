@@ -45,8 +45,6 @@ public class ShelterInfo {
     @Type(type = "org.hibernate.type.TextType")
     private String workSchedule;
 
-
-
     public Long getId() {
         return id;
     }
