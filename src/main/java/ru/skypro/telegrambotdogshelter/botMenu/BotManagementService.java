@@ -242,7 +242,9 @@ public class BotManagementService {
 
         telegramBot.execute(message);
     }
+    public void sendShelterWorkScheduleText(Long Id, Long chat) {
 
+    }
 
 }
 
