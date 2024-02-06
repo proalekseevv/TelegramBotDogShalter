@@ -3,18 +3,14 @@ package ru.skypro.telegrambotdogshelter.listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.botMenu.BotManagementService;
-
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
-import ru.skypro.telegrambotdogshelter.services.interfaces.UsersContactInfoService;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 
 
 /**

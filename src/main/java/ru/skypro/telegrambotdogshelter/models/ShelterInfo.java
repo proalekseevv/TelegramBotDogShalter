@@ -46,13 +46,13 @@ public class ShelterInfo {
     private String workSchedule;
 
 
-    public String getWorkSchedule() {
-        return workSchedule;
-    }
+//    public String getWorkSchedule() {
+//        return workSchedule;
+//    }
 
-    public void setWorkSchedule(String workSchedule) {
-        this.info = info;
-    }
+//    public void setWorkSchedule(String workSchedule) {
+//        this.info = info;
+//    }
 
     @Override
     public boolean equals(Object o) {

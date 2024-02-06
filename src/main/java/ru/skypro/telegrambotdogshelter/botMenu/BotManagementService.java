@@ -77,6 +77,7 @@ public class BotManagementService {
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Узнать информацию о приюте").callbackData("info_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Как взять животное из приюта").callbackData("takePet_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("sendReport_" + shelterInfo.getId()));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Расписание работы приюта").callbackData("workSchedule_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Позвать волонтера").callbackData("callVolunteer"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
 
@@ -217,8 +218,19 @@ public class BotManagementService {
 
         telegramBot.execute(message);
     }
-    public void sendShelterWorkScheduleText(Long Id, Long chat) {
+    public void sendShelterWorkScheduleText(Long chatId, long shelterId) {
+        try {
+            ShelterInfoDto shelterInfo = shelterInfoService.read(shelterId);
 
+            // Формирование текста сообщения с информацией о том, как взять животное из приюта
+            String shelterInfoMessage = "Расписание работы приюта: " + "\n" + shelterInfo.getWorkSchedule();
+            // Отправка сообщения с информацией о приюте
+            telegramBot.execute(new SendMessage(chatId, shelterInfoMessage));
+        } catch (ShelterIsNotExistsException e) {
+            // Обработка ошибки, если приют не найден
+            logger.error("Error while reading shelter with ID: {}", shelterId, e);
+            telegramBot.execute(new SendMessage(chatId, "Извините, информация о приюте недоступна."));
+        }
     }
 
 }
