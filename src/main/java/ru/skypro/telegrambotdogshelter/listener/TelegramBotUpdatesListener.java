@@ -3,18 +3,14 @@ package ru.skypro.telegrambotdogshelter.listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.botMenu.BotManagementService;
-
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
-import ru.skypro.telegrambotdogshelter.services.interfaces.UsersContactInfoService;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 
 
 /**
@@ -109,6 +105,13 @@ public class TelegramBotUpdatesListener {
                 // Отображение кнопки "Назад"
                 service.sendBackToSheltersButton2(chatId);
                 break;
+            case "workSchedule":
+                // Отображение информации о расписание работы приюта
+                shelterId = callbackData.replace("workSchedule_", "");
+                service.sendShelterWorkScheduleText(chatId, Long.parseLong(shelterId));
+                service.sendBackToSheltersButton2(chatId);
+                break;
+
             case "backToShelters":
                 // Возвращение к списку приютов
                 shelterId = callbackData.replace("backToShelters", "");
