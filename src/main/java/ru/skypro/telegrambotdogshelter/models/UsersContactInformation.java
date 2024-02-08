@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+
 @Component
 @EqualsAndHashCode(exclude = "id")
 @Getter
@@ -28,14 +29,8 @@ public class UsersContactInformation {
     @Column(name = "surname")
     private String surname;
 
-    @Column(name = "age")
-    private int age;
-
     @Column(name = "phone")
     private long phoneNumber;
-
-    @Column(name = "email")
-    private String email;
 
 
     public UsersContactInformation(long chatId, String name, String surname, int age, long phoneNumber, String email) {
@@ -43,11 +38,40 @@ public class UsersContactInformation {
         this.id = id;
         this.name = name;
         this.surname = surname;
-        this.age = age;
         this.phoneNumber = phoneNumber;
-        this.email = email;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public long getChatId() {
+        return chatId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setPhoneNumber(long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
 
 

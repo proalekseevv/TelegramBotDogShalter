@@ -147,18 +147,18 @@ public class TelegramBotUpdatesListener {
                 break;
 
             case "sendUserInfo":
-                // Вопросы о том, какую информацию нужно предоставить для связи
+                // Кнопка отправки контакта
                 shelterId = callbackData.replace("sendUserInfo_", "");
 
                 Keyboard keyboard = new ReplyKeyboardMarkup(
                         new KeyboardButton[]{
-                                new KeyboardButton("text"),
-                                new KeyboardButton("contact").requestContact(true),
-                                new KeyboardButton("location").requestLocation(true)
-                        }
+                                new KeyboardButton("Отправить данные").requestContact(true),
+                                                        }
 
                 );
-                telegramBot.execute(new SendMessage(chatId, "Отправить данные:").replyMarkup(keyboard));
+                telegramBot.execute(new SendMessage(chatId, "Для отправки данных нажми кнопку.")
+                        .replyMarkup(keyboard));
+                service.sendBackToSheltersButton2(chatId);
                 break;
 
 
