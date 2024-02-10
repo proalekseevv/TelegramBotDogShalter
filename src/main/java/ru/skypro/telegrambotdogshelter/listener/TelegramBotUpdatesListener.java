@@ -106,7 +106,7 @@ public class TelegramBotUpdatesListener {
                 service.sendBackToSheltersButton2(chatId);
                 break;
             case "workSchedule":
-                // Отображение информации о расписание работы приюта
+                // Отображение информации о расписании работы приюта, адресе и схеме проезда
                 shelterId = callbackData.replace("workSchedule_", "");
                 service.sendShelterWorkScheduleText(chatId, Long.parseLong(shelterId));
                 service.sendBackToSheltersButton2(chatId);
@@ -130,7 +130,7 @@ public class TelegramBotUpdatesListener {
                 break;
 
             case "callVolunteer":
-                final  Long targetChatId = -4197641181L;
+                final Long targetChatId = -4197641181L;
 
                 service.processUserRequest(chatId, targetChatId);
                 // Отображение кнопки "Назад"
