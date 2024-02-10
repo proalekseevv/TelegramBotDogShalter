@@ -120,7 +120,7 @@ public class TelegramBotUpdatesListener {
                 service.sendBackToSheltersButton2(chatId);
                 break;
             case "workSchedule":
-                // Отображение информации о расписание работы приюта
+                // Отображение информации о расписании работы приюта, адресе и схеме проезда
                 shelterId = callbackData.replace("workSchedule_", "");
                 service.sendShelterWorkScheduleText(chatId, Long.parseLong(shelterId));
                 service.sendBackToSheltersButton2(chatId);

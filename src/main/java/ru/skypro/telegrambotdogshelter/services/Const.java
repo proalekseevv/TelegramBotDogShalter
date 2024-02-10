@@ -1,6 +1,8 @@
 package ru.skypro.telegrambotdogshelter.services;
 
 public class Const {
+    public static final String DRIVING_DIRECTION =
+            "https://image2.yell.ru/pr-cache/wMc6_AzddMkTIrf8FMAW_Q==/,/H0_Ibn18YkUyqOMtkWZ9q88o8TDzFqAOmoUBtasZkBwaQi7sMxCXA-_g4wrzHW5WvycGlVMOfRfiNB8hefZHcnoGcyAdgOCW2_VVh0fzckt_gFm1oytp4NKbItn1u4rSfQ9IcPC2R7CHpQCc3dItx-QJ5wrShxn6";
     public static final String INTRODUCE_RULES = "Правила знакомства с животным до того, как забрать его из приюта";
     public static final String DOCUMENT_LIST =
             "список документов, необходимых для того, чтобы взять животное из приюта";
