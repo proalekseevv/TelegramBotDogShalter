@@ -1,5 +1,6 @@
 package ru.skypro.telegrambotdogshelter.models;
 
+import liquibase.pro.packaged.L;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
@@ -11,17 +12,18 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users_contact_info")
+@ToString
+@Table(name = "users_contact_info", schema = "bot")
 @Entity
 public class UsersContactInformation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
 
 
     @Column(name = "chat_id")
-    private long chatId;
+    private Long chatId;
 
     @Column(name = "name")
     private String name;
@@ -30,48 +32,13 @@ public class UsersContactInformation {
     private String surname;
 
     @Column(name = "phone")
-    private long phoneNumber;
+    private Long phoneNumber;
 
 
-    public UsersContactInformation(long chatId, String name, String surname, int age, long phoneNumber, String email) {
-        this.chatId = chatId;
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.phoneNumber = phoneNumber;
-    }
 
-    public long getId() {
-        return id;
-    }
 
-    public long getChatId() {
-        return chatId;
-    }
 
-    public String getName() {
-        return name;
-    }
 
-    public String getSurname() {
-        return surname;
-    }
-
-    public long getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public void setPhoneNumber(long phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 }
 
 

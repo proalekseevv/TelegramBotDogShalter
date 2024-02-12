@@ -60,7 +60,7 @@ public class TelegramBotUpdatesListener {
      */
     private void processUpdate(Update update) {
         // Запись информации об обновлении в лог
-        logger.info("Processing update: {}", update);
+        logger.info("Processing update: {}",  update);
 
         // Проверка, является ли обновление результатом нажатия на кнопку встроенной клавиатуры
         if (update.callbackQuery() != null) {
@@ -76,7 +76,7 @@ public class TelegramBotUpdatesListener {
             service.sendSheltersMenu(update.message().chat().id());
             service.sendSheltersMenu4(update.message().chat().id());
         } else if (update.message().contact() != null) {
-            logger.info("Запущена обработка контактных данных.");
+
             userService.saveUserInfo(update);
         }
 
