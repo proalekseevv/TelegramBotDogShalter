@@ -130,8 +130,7 @@ public class TelegramBotUpdatesListener {
                 break;
 
             case "callVolunteer":
-                final Long targetChatId = -4197641181L;
-
+                final  Long targetChatId = -4197641181L;
                 service.processUserRequest(chatId, targetChatId);
                 // Отображение кнопки "Назад"
                 service.sendBackToSheltersButton2(chatId);
