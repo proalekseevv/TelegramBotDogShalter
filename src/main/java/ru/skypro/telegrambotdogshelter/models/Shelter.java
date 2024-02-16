@@ -1,17 +1,17 @@
 package ru.skypro.telegrambotdogshelter.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Type;
+import ru.skypro.telegrambotdogshelter.models.DTO.Animal;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +30,10 @@ public class Shelter {
     @Column(name = "name", nullable = false)
     @Type(type = "org.hibernate.type.TextType")
     private String name;
+
+    @OneToMany(mappedBy = "shelter")
+    @JsonIgnore
+    private Collection<Animal> animals;
 
     public Long getId() {
         return id;
