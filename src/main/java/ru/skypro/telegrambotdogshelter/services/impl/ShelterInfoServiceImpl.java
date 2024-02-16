@@ -76,6 +76,8 @@ public class ShelterInfoServiceImpl implements ShelterInfoService {
             shelterInfo.setInfoPets(dto.getInfoPets());
             shelterInfo.setEmail(dto.getEmail());
             shelterInfo.setPhoneNumber(dto.getPhoneNumber());
+            shelterInfo.setContactForPass(dto.getContactForPass());
+            shelterInfo.setRecommendationTB(dto.getRecommendationTB());
             ShelterInfo updatedShelterInfo = repository.save(shelterInfo);
 
             // Добавьте операторы логирования для отслеживания значений переменных
