@@ -1,10 +1,15 @@
 package ru.skypro.telegrambotdogshelter.services.impl;
 
+import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.model.request.Keyboard;
+import com.pengrad.telegrambot.model.request.KeyboardButton;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.skypro.telegrambotdogshelter.botMenu.BotManagementService;
 import ru.skypro.telegrambotdogshelter.exceptions.UserIdNotFoundException;
 import ru.skypro.telegrambotdogshelter.models.Shelter;
 import ru.skypro.telegrambotdogshelter.repository.ShelterRepository;
@@ -24,6 +29,9 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
     private final UsersContactInfoRepository userContactInformationRepository;
 
     private final UsersContactInformation usersContactInformation;
+    private final TelegramBot telegramBot;
+    private final BotManagementService service;
+
 
     @Override
     public UsersContactInformation createUserService(UsersContactInformation usersContactInformation) {
@@ -45,8 +53,6 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
         logger.info("Запущена обработка контактных данных.");
         long chatId = update.message().chat().id();
 
-      //  createUserService(usersContactInformation);
-
         String userName = update.message().contact().firstName();
         String userSurname = update.message().contact().lastName();
         String userPhone = update.message().contact().phoneNumber();
@@ -55,22 +61,26 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
         String userPhoneNumber = userPhone.substring(1);
         Long userPhoneLong = Long.parseLong(userPhoneNumber);
 
+        // Сохранение данных контакта в БД
         UsersContactInformation newUser = new UsersContactInformation(null,
                 chatId, userName, userSurname, userPhoneLong);
 
-        //System.out.println(newUser);
-
-        //shelterRepository.save(new Shelter(1L, "sh1"));
-
         if (userContactInformationRepository.existByPhoneNumber(userPhoneLong) == null) {
+            userContactInformationRepository.save(newUser);
+            // Информация о записанных данных и возврат в меню.
+            telegramBot.execute(new SendMessage(chatId,
+                    "Ваши данные успешно записаны."));
+            service.sendBackToSheltersButton2(chatId);
 
-
-   userContactInformationRepository.save(newUser);}
-       // System.out.println(userContactInformationRepository.findAll());
+        } else
+        {
+            telegramBot.execute(new SendMessage(chatId,
+                    "Такой пользователь уже записан."));
+            service.sendBackToSheltersButton2(chatId);
+        }
 
 
     }
-
 
 
 }

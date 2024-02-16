@@ -60,7 +60,7 @@ public class TelegramBotUpdatesListener {
      */
     private void processUpdate(Update update) {
         // Запись информации об обновлении в лог
-        logger.info("Processing update: {}",  update);
+        logger.info("Processing update: {}", update);
 
         // Проверка, является ли обновление результатом нажатия на кнопку встроенной клавиатуры
         if (update.callbackQuery() != null) {
@@ -160,12 +160,11 @@ public class TelegramBotUpdatesListener {
                 Keyboard keyboard = new ReplyKeyboardMarkup(
                         new KeyboardButton[]{
                                 new KeyboardButton("Отправить данные").requestContact(true),
-                                                        }
+                        }
 
                 );
                 telegramBot.execute(new SendMessage(chatId, "Для отправки данных нажми кнопку.")
                         .replyMarkup(keyboard));
-                service.sendBackToSheltersButton2(chatId);
                 break;
 
 
