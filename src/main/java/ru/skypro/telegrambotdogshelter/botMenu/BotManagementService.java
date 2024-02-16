@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.SendPhoto;
 import com.pengrad.telegrambot.response.SendResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.exceptions.ShelterIsNotExistsException;
 import ru.skypro.telegrambotdogshelter.models.DTO.ShelterDto;
 import ru.skypro.telegrambotdogshelter.models.DTO.ShelterInfoDto;
+import ru.skypro.telegrambotdogshelter.services.Const;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterInfoService;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
 
@@ -77,7 +79,7 @@ public class BotManagementService {
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Узнать информацию о приюте").callbackData("info_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Как взять животное из приюта").callbackData("takePet_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("sendReport_" + shelterInfo.getId()));
-        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Расписание работы приюта").callbackData("workSchedule_" + shelterInfo.getId()));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Расписание работы приюта, адрес и схема проезда").callbackData("workSchedule_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Позвать волонтера").callbackData("callVolunteer"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
 
@@ -222,10 +224,12 @@ public class BotManagementService {
         try {
             ShelterInfoDto shelterInfo = shelterInfoService.read(shelterId);
 
-            // Формирование текста сообщения с информацией о том, как взять животное из приюта
-            String shelterInfoMessage = "Расписание работы приюта: " + "\n" + shelterInfo.getWorkSchedule();
+            // Формирование текста сообщения с информацией о том, расписании работы приюта, адресе и схеме проезда
+            String shelterInfoMessage = "Расписание работы приюта: " + "\n" + shelterInfo.getWorkSchedule() + "\n" +
+                    "Адрес: Это адрес приюта" + "\n" + "Схема проезда";
             // Отправка сообщения с информацией о приюте
             telegramBot.execute(new SendMessage(chatId, shelterInfoMessage));
+            telegramBot.execute(new SendPhoto(chatId, Const.DRIVING_DIRECTION));
         } catch (ShelterIsNotExistsException e) {
             // Обработка ошибки, если приют не найден
             logger.error("Error while reading shelter with ID: {}", shelterId, e);
