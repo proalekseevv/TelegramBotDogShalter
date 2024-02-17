@@ -79,9 +79,7 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
             service.sendBackToSheltersButton2(chatId);
         }
 
-
     }
-
 
 }
 
