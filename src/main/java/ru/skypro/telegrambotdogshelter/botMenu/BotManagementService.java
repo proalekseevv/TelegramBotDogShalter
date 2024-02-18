@@ -12,12 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.exceptions.ShelterIsNotExistsException;
+import ru.skypro.telegrambotdogshelter.models.DTO.Animal;
 import ru.skypro.telegrambotdogshelter.models.DTO.ShelterDto;
 import ru.skypro.telegrambotdogshelter.models.DTO.ShelterInfoDto;
 import ru.skypro.telegrambotdogshelter.services.Const;
+import ru.skypro.telegrambotdogshelter.services.interfaces.AnimalService;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterInfoService;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -34,6 +37,7 @@ public class BotManagementService {
     private final ShelterInfoService shelterInfoService;
 
     private final ShelterService shelterService;
+    private final AnimalService animalService;
 
     // Логгер
     private final Logger logger = LoggerFactory.getLogger(BotManagementService.class);
@@ -80,6 +84,7 @@ public class BotManagementService {
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Как взять животное из приюта").callbackData("takePet_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("sendReport_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Расписание работы приюта, адрес и схема проезда").callbackData("workSchedule_" + shelterInfo.getId()));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список животных для усыновления").callbackData("listAnimals_"+shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Позвать волонтера").callbackData("callVolunteer"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
 
@@ -190,13 +195,23 @@ public class BotManagementService {
         callVolunteer(volunteerChatId);
     }
 
+    public void processUserRequest2(Long chatId) {
 
-    private static Keyboard keyboardMarkup() {
-        final String url = "https://t.me/+aptCEg65ORBhYzk6";
-        InlineKeyboardButton button = new InlineKeyboardButton("Ссылка на чат с волонтером");
-        button.url(url);
-        InlineKeyboardMarkup markup = new InlineKeyboardMarkup(button);
-        return markup;
+        button(chatId);
+
+        logger.info("Отправляем пользователю ссылку на подключение к боту");
+
+    }
+
+
+
+
+        private static Keyboard keyboardMarkup (Long chatId) {
+            final String url = "https://t.me/+aptCEg65ORBhYzk6";
+            InlineKeyboardButton button = new InlineKeyboardButton("Ссылка на чат с волонтером");
+            button.url(url);
+            InlineKeyboardMarkup markup = new InlineKeyboardMarkup(button);
+            return markup;
     }
 
     public void callVolunteer(Long targetChatId) {
@@ -235,6 +250,23 @@ public class BotManagementService {
             logger.error("Error while reading shelter with ID: {}", shelterId, e);
             telegramBot.execute(new SendMessage(chatId, "Извините, информация о приюте недоступна."));
         }
+
+    }
+
+    public void sendListOfAnimals(Long chatId, long shelterId) {
+        Collection<Animal> animals = animalService.getAnimalsByShelterId(shelterId);
+        StringBuilder response = new StringBuilder();
+        response.append("Список животных для усыновления:\n");
+        for (Animal animal : animals) {
+            response.append(animal.getTypeOfAnimal())
+                    .append(" ")
+                    .append(animal.getName()).append(" - ")
+                    .append("полных лет ")
+                    .append(animal.getAge())
+                    .append(", окрас ")
+                    .append(animal.getColor().toString().toLowerCase())
+                    .append("\n");}
+        telegramBot.execute(new SendMessage(chatId, response.toString()));
     }
 
 }

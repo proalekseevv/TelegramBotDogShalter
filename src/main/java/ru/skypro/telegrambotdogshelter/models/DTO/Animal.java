@@ -4,11 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Type;
 import ru.skypro.telegrambotdogshelter.enums.TypeOfAnimal;
 import ru.skypro.telegrambotdogshelter.models.Shelter;
-import ru.skypro.telegrambotdogshelter.models.UsersContactInformation;
-
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -23,33 +20,34 @@ import java.util.Objects;
 public class Animal {
     @Id
     @Column(name = "animal_id", nullable = false)
-    private Long animalId;
+    private long animalId;
 
     @Column(name = "name", nullable = false)
-    @Type(type = "org.hibernate.type.TextType")
     private String name;
 
     @Column(name = "age", nullable = false)
-@Type(type = "org.hibernate.type.TextType")
     private int age;
 
     @Column(name = "color", nullable = false)
-    @Type(type = "org.hibernate.type.TextType")
     private String color;
 
     @Getter
     @Column(name = "animal")
-    @Type(type = "org.hibernate.type.TextType")
     @Enumerated(EnumType.STRING)
     private TypeOfAnimal typeOfAnimal;
+
+    @ManyToOne
+    @JoinColumn(name = "shelter_id")
+    private Shelter shelter;
+
+
+
 
     public void setTypeOfAnimal(TypeOfAnimal typeOfAnimal) {
         this.typeOfAnimal = typeOfAnimal;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "shelter_id")
-    private Shelter shelter;
+
 
     @Override
     public boolean equals(Object o) {

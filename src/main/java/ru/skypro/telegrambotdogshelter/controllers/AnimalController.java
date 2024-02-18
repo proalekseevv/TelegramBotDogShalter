@@ -1,10 +1,14 @@
 package ru.skypro.telegrambotdogshelter.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.telegrambotdogshelter.models.DTO.Animal;
 import ru.skypro.telegrambotdogshelter.services.interfaces.AnimalService;
 
+import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -15,18 +19,23 @@ public class AnimalController {
     private final AnimalService animalService;
 
     @PostMapping
-    public Animal createAnimal(@RequestBody Animal animal){
-        return animalService.createAnimal(animal);
+    public ResponseEntity<Animal> createAnimal(@Valid @RequestBody Animal animal ){
+        return ResponseEntity.status(HttpStatus.CREATED).body(animalService.createAnimal(animal));
     }
-    @GetMapping("/{animal_id}")
-    public Animal readAnimal(@PathVariable long animalId)
+    @PostMapping("/{animal_id}")
+    public Animal readAnimalById(@PathVariable long animalId)
     {
         return animalService.readAnimalById(animalId);
     }
 
     @GetMapping
     public List<Animal> getAllAnimals() {
-        return animalService.getAll();
+        return animalService.getAllAnimals();
+    }
+
+    @GetMapping("/{shelter_id}")
+    public Collection<Animal> getAnimalsInShelter(@RequestParam long shelterId){
+        return animalService.getAnimalsByShelterId(shelterId);
     }
 
     @PutMapping()
