@@ -1,9 +1,18 @@
 package ru.skypro.telegrambotdogshelter.enums;
 
 public enum TypeOfAnimal {
-    CAT,
-    DOG;
+    CAT("Кот"),
+    DOG("Собака");
+private String russianName;
+    TypeOfAnimal(String russianName) {
+        this.russianName = russianName;
+    }
+    public String getRussianName() {
+        return russianName;
+    }
 
-    TypeOfAnimal() {
+    @Override
+    public String toString() {
+        return russianName;
     }
 }

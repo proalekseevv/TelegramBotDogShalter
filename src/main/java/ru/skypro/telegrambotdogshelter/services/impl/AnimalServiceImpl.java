@@ -14,9 +14,11 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+
 public class AnimalServiceImpl implements AnimalService {
 
 private final AnimalRepository animalRepository;
+
     Logger logger = LoggerFactory.getLogger(AnimalServiceImpl.class);
     public Collection<Animal> animals = new ArrayList<>();
     @Override
@@ -52,8 +54,15 @@ private final AnimalRepository animalRepository;
     }
 
     @Override
-    public List<Animal> getAll()
+    public List<Animal> getAllAnimals()
     {
         return new ArrayList<>(animalRepository.findAll());
     }
+
+    @Override
+    public Collection<Animal> getAnimalsByShelterId(long shelterId) {
+        logger.info("Was invoked method for getting all animals by shelter id {}", shelterId);
+        return animalRepository.findAllByShelterId(shelterId);
+    }
+
 }

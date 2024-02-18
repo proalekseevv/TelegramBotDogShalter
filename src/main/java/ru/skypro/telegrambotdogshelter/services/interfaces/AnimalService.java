@@ -3,9 +3,11 @@ package ru.skypro.telegrambotdogshelter.services.interfaces;
 
 import ru.skypro.telegrambotdogshelter.models.DTO.Animal;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface AnimalService {
+
 
     Animal createAnimal(Animal animal);
 
@@ -15,5 +17,7 @@ public interface AnimalService {
 
     Animal deleteAnimal(long animal_id);
 
-    List<Animal> getAll();
+    List<Animal> getAllAnimals();
+
+    Collection<Animal> getAnimalsByShelterId(long shelterId);
 }

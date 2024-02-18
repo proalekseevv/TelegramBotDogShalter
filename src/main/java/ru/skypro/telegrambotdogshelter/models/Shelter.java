@@ -32,8 +32,7 @@ public class Shelter {
     private String name;
 
     @OneToMany(mappedBy = "shelter")
-    @JsonIgnore
-    private Collection<Animal> animals;
+    @JsonIgnore private Collection<Animal> animals;
 
     public Long getId() {
         return id;
