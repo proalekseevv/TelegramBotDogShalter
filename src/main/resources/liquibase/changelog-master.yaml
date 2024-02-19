@@ -20,6 +20,10 @@ databaseChangeLog:
 
   - include:
       relativeToChangeLogFile: true
+
+      file: sql/info-3.sql
+
       file: sql/animals-info.sql
+
 
 

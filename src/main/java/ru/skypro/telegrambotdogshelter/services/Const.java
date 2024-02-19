@@ -5,29 +5,29 @@ public class Const {
             "https://image2.yell.ru/pr-cache/wMc6_AzddMkTIrf8FMAW_Q==/,/H0_Ibn18YkUyqOMtkWZ9q88o8TDzFqAOmoUBtasZkBwaQi7sMxCXA-_g4wrzHW5WvycGlVMOfRfiNB8hefZHcnoGcyAdgOCW2_VVh0fzckt_gFm1oytp4NKbItn1u4rSfQ9IcPC2R7CHpQCc3dItx-QJ5wrShxn6";
     public static final String INTRODUCE_RULES = "Правила знакомства с животным до того, как забрать его из приюта";
     public static final String DOCUMENT_LIST =
-            "список документов, необходимых для того, чтобы взять животное из приюта";
+            "Список документов, необходимых для того, чтобы взять животное из приюта";
     public static final String LIST_TRANSPORTATION_RECOMMENDATIONS =
-            "список рекомендаций по транспортировке животного";
+            "Список рекомендаций по транспортировке животного";
     public static final String LIST_RECOMMENDATIONS_FOR_ARRANGING_HOME_FOR_PUPPY
-            = "список рекомендаций по обустройству дома для щенка";
+            = "Список рекомендаций по обустройству дома для щенка";
     public static final String LIST_RECOMMENDATIONS_FOR_ARRANGING_HOME_FOR_ADULT_ANIMAL
-            = "список рекомендаций по обустройству дома для взрослого животного";
+            = "Список рекомендаций по обустройству дома для взрослого животного";
     public static final String LIST_RECOMMENDATIONS_FOR_ARRANGING_HOME_FOR_ANIMAL_WITH_DISABILITIES
-            = "список рекомендаций по обустройству дома для животного с ограниченными возможностями (зрение, передвижение)";
+            = "Список рекомендаций по обустройству дома для животного с ограниченными возможностями (зрение, передвижение)";
     public static final String ADVICE_FROM_DOG_HANDLER_ON_INITIAL_COMMUNICATION_WITH_DOG
-            = "советы кинолога по первичному общению с собакой";
+            = "Советы кинолога по первичному общению с собакой";
     public static final String LIST_REASONS_FOR_REFUSAL
-            = "список причин, почему могут отказать и не дать забрать собаку из приюта";
+            = "Список причин, почему могут отказать и не дать забрать собаку из приюта";
     public static final String WRITE_DOWN_CONTACT_DETAILS
-            = "принять и записать контактные данные для связи";
+            = "Принять и записать контактные данные для связи";
     public static final String CALL_VOLUNTEER
-            = "позвать волонтера";
-    public static final String SEND_DAILY_REPORT_FORM
-            = "прислать форму ежедневного отчета";
+            = "Позвать волонтера";
+    public static final String DAILY_REPORT_FORM
+            = "https://ppt.ru/fls/97469/forma-otchet-rabotnika-o-prodelannoy-rabote.rtf?ysclid=lsn5y81x28175636152";
     public static final String REQUEST_TEXT
-            = "пользователь прислал только фото, бот может запросить текст";
+            = "Пользователь прислал только фото, бот может запросить текст";
     public static final String REQUEST_PHOTO
-            = "пользователь прислал только текст, бот может запросить фото";
+            = "Пользователь прислал только текст, бот может запросить фото";
     public static final String WARNING_ABOUT_REPORT
             = "Дорогой усыновитель, мы заметили, что ты заполняешь отчет не так " +
             "подробно, как необходимо. Пожалуйста, подойди ответственнее к этому занятию. " +
@@ -39,5 +39,7 @@ public class Const {
     public static final String ADOPTIVE_PARENT_NOT_PASS_PROBATIONARY_PERIOD
             = "Усыновитель не прошел испытательный срок";
     public static final String RECOMMENDATIONS_ABOUT_SAFETY_PRECAUTIONS_ON_TERRITORY_SHELTER
-            = "общие рекомендации о технике безопасности на территории приюта";
+            = "Общие рекомендации о технике безопасности на территории приюта";
+    public static final String RECOMMENDATIONS_TRUSTED_DOG_HANDLERS
+            = "Рекомендации по проверенным кинологам для дальнейшего обращения к ним";
 }
