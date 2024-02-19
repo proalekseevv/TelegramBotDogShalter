@@ -3,12 +3,19 @@ package ru.skypro.telegrambotdogshelter.listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import com.pengrad.telegrambot.model.request.Keyboard;
+import com.pengrad.telegrambot.model.request.KeyboardButton;
+import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
+import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.botMenu.BotManagementService;
+import ru.skypro.telegrambotdogshelter.services.impl.UsersContactInfoServiceImpl;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
+import ru.skypro.telegrambotdogshelter.services.interfaces.UsersContactInfoService;
 
 import javax.annotation.PostConstruct;
 
@@ -32,6 +39,8 @@ public class TelegramBotUpdatesListener {
 
     // Логгер
     private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
+    // Экземпляр класса UsersContactInfoService для работы с данными пользователей
+    private final UsersContactInfoService userService;
 
     /**
      * Метод, вызываемый после создания экземпляра класса. Устанавливает слушателя обновлений бота.
@@ -66,9 +75,13 @@ public class TelegramBotUpdatesListener {
             // Отправка пользователю меню с приютами
             service.sendSheltersMenu(update.message().chat().id());
             service.sendSheltersMenu4(update.message().chat().id());
-        }
-    }
+        } else if (update.message().contact() != null) {
 
+            userService.saveUserInfo(update);
+        }
+
+
+    }
 
 
     /**
@@ -79,7 +92,6 @@ public class TelegramBotUpdatesListener {
      */
     private void handleCallbackData(Update update, String callbackData, Long chatId) {
         String shelterId;
-
 
         // Разделяем строку callbackData по символу '_' и берем первый элемент (индекс 0),
         // который представляет собой тип действия пользователя.
@@ -139,13 +151,30 @@ public class TelegramBotUpdatesListener {
                 break;
 
             case "callVolunteer":
+                final  Long targetChatId = -4197641181L;
 
 //                Вызов волонтера и переход в чат с волонтерами
                 service.processUserRequest(chatId, targetChatId);
                 // Отображение кнопки "Назад"
                 service.sendBackToSheltersButton2(chatId);
 
+
                 break;
+
+            case "sendUserInfo":
+                // Кнопка отправки контакта
+                shelterId = callbackData.replace("sendUserInfo_", "");
+
+                Keyboard keyboard = new ReplyKeyboardMarkup(
+                        new KeyboardButton[]{
+                                new KeyboardButton("Отправить данные").requestContact(true),
+                        }
+
+                );
+                telegramBot.execute(new SendMessage(chatId, "Для отправки данных нажми кнопку.")
+                        .replyMarkup(keyboard));
+                break;
+
 
             default:
                 break;
