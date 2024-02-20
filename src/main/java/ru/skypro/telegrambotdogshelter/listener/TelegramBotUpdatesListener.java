@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.botMenu.BotManagementService;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
+import ru.skypro.telegrambotdogshelter.services.interfaces.UsersContactInfoService;
 
 import javax.annotation.PostConstruct;
 
@@ -32,12 +33,11 @@ public class TelegramBotUpdatesListener {
 
     // Экземпляр BotManagementService для обработки обновлений и отправки сообщений
     private final BotManagementService service;
+    private final UsersContactInfoService userService;
 
 
     // Логгер
     private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
-    // Экземпляр класса UsersContactInfoService для работы с данными пользователей
-//    private final UsersContactInfoService userService;
 
     /**
      * Метод, вызываемый после создания экземпляра класса. Устанавливает слушателя обновлений бота.
@@ -72,13 +72,14 @@ public class TelegramBotUpdatesListener {
             // Отправка пользователю меню с приютами
             service.sendSheltersMenu(update.message().chat().id());
             service.sendSheltersMenu4(update.message().chat().id());
-        } else if (update.message().contact() != null) {
-
-//            userService.saveUserInfo(update);
         }
+        else if (update.message().contact() != null) {
 
-
+            userService.saveUserInfo(update);}
     }
+
+
+
 
 
     /**
@@ -130,6 +131,7 @@ public class TelegramBotUpdatesListener {
                 service.sendBackToSheltersButton2(chatId);
                break;
 
+
             case "backToShelters":
                 // Возвращение к списку приютов
                 shelterId = callbackData.replace("backToShelters", "");
@@ -140,11 +142,16 @@ public class TelegramBotUpdatesListener {
                 try {
                     String shelterIdStr = callbackData.substring("backToShelters".length());
                     long parsedShelterId = Long.parseLong(shelterIdStr);
-                    service.sendShelterInfoMenu(chatId, parsedShelterId);
+                    service.sendShelterInformMenu(chatId, parsedShelterId);
                 } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
                     // Обработка ошибок парсинга shelterId или выхода за пределы строки
                     logger.error("Error parsing shelterId from callbackData: {}", callbackData, e);
                 }
+                break;
+
+            case "backToConsultationMenu":
+                // Возвращение к меню консультации
+                service.sendConsultationMenu(chatId);
                 break;
 
             case "callVolunteer":
@@ -155,7 +162,20 @@ public class TelegramBotUpdatesListener {
                 // Отображение кнопки "Назад"
                 service.sendBackToSheltersButton2(chatId);
 
+                break;
 
+            case "sendUserInfo":
+                // Кнопка отправки контакта
+                shelterId = callbackData.replace("sendUserInfo_", "");
+
+                Keyboard keyboard = new ReplyKeyboardMarkup(
+                        new KeyboardButton[]{
+                                new KeyboardButton("Отправить данные").requestContact(true),
+                        }
+
+                );
+                telegramBot.execute(new SendMessage(chatId, "Для отправки данных нажми кнопку.")
+                        .replyMarkup(keyboard));
                 break;
 
 //            case "sendUserInfo":

@@ -72,7 +72,8 @@ public class BotManagementService {
      * @param chatId    Идентификатор чата, куда отправляется сообщение.
      * @param shelterId Идентификатор приюта, информацию о котором нужно отправить.
      */
-    public void sendShelterInfoMenu(Long chatId, long shelterId) {
+
+    public void sendShelterInformMenu(Long chatId, long shelterId) {
         ShelterInfoDto shelterInfo = shelterInfoService.read(shelterId);
 
         // Текст сообщения перед меню
@@ -85,7 +86,58 @@ public class BotManagementService {
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Отправить контактные данные").callbackData("sendUserInfo_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("sendReport_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Расписание работы приюта, адрес и схема проезда").callbackData("workSchedule_" + shelterInfo.getId()));
+
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Контактные данные охраны для оформления пропуска").callbackData("contactForPass_" + shelterInfo.getId()));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Общие рекомендации о технике безопасности на территории приюта").callbackData("recommendationTB_" + shelterInfo.getId()));
+//
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
+        // Отправка сообщения с клавиатурой
+        telegramBot.execute(new SendMessage(chatId, infoON)
+                .replyMarkup(inlineKeyboardMarkup));
+//        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
+    }
+    public void sendConsultationMenu(Long chatId) {
+//        ShelterInfoDto shelterInfo = shelterInfoService.read(shelterId);
+
+        // Текст сообщения перед меню
+        String infoON = "Выбери меню: ";
+
+        // Создание клавиатуры с кнопками
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+//         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список животных для усыновления").callbackData("listOfAnimalsForAdoption_"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Правила знакомства с животным").callbackData("introduceRules"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список документов, необходимых для того, чтобы взять животное из приюта").callbackData("documentList" ));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список рекомендаций по транспортировке животного").callbackData("listTransportationRecommendations"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список рекомендаций по обустройству дома для щенка").callbackData("listRecommendationsForHomePuppy"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список рекомендаций по обустройству дома для взрослого животного").callbackData("listRecommendationsForHomeAdultAnimal"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список рекомендаций по обустройству дома для животного с ограниченными возможностями (зрение, передвижение)").callbackData("listRecommendationsForHomeAnimalWithDisabilities"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Советы кинолога по первичному общению с собакой").callbackData("adviceFromDogHandler"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список причин, почему могут отказать и не дать забрать собаку из приюта").callbackData("listReasonsForRefusal"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать форму ежедневного отчета").callbackData("sendReportForm"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Рекомендации по проверенным кинологам для дальнейшего обращения к ним").callbackData("recommendationsTrustedDogHandlers"));
+//
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
+        // Отправка сообщения с клавиатурой
+        telegramBot.execute(new SendMessage(chatId, infoON)
+                .replyMarkup(inlineKeyboardMarkup));
+//        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
+    }
+
+    public void sendShelterInfoMenu(Long chatId, long shelterId) {
+        ShelterInfoDto shelterInfo = shelterInfoService.read(shelterId);
+
+        // Текст сообщения перед меню
+        String infoON = "Выбери меню: ";
+
+        // Создание клавиатуры с кнопками
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("О приюте").callbackData("about_" + shelterInfo.getId()));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Консультация с потенциальным хозяином животного").callbackData("consultationPotentialOwnerOfShelterAnimal"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("sendReport_" + shelterInfo.getId()));
+
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список животных для усыновления").callbackData("listAnimals_"+shelterInfo.getId()));
+
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Позвать волонтера").callbackData("callVolunteer"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
 
@@ -94,7 +146,7 @@ public class BotManagementService {
                 .replyMarkup(inlineKeyboardMarkup));
 
         // Добавление кнопки "Назад" или подобной, чтобы вернуться к списку приютов
-        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
+//        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
     }
 
     /**
