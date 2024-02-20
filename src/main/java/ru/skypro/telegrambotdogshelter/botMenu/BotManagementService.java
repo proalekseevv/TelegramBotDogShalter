@@ -207,7 +207,7 @@ public class BotManagementService {
 
         button(chatId);
 
-        logger.info("Отправляем пользователю ссылку на подключение к боту");
+        logger.info("Отправляем пользователю ссылку на подключение к чату с волонтерами");
 
     }
 
