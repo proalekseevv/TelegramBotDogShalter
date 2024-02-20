@@ -3,12 +3,17 @@ package ru.skypro.telegrambotdogshelter.listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.request.Keyboard;
+import com.pengrad.telegrambot.model.request.KeyboardButton;
+import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
+import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.botMenu.BotManagementService;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
+import ru.skypro.telegrambotdogshelter.services.interfaces.UsersContactInfoService;
 
 import javax.annotation.PostConstruct;
 
@@ -28,6 +33,7 @@ public class TelegramBotUpdatesListener {
 
     // Экземпляр BotManagementService для обработки обновлений и отправки сообщений
     private final BotManagementService service;
+    private final UsersContactInfoService userService;
 
 
     // Логгер
@@ -67,6 +73,9 @@ public class TelegramBotUpdatesListener {
             service.sendSheltersMenu(update.message().chat().id());
             service.sendSheltersMenu4(update.message().chat().id());
         }
+        else if (update.message().contact() != null) {
+
+            userService.saveUserInfo(update);}
     }
 
 
@@ -261,6 +270,20 @@ public class TelegramBotUpdatesListener {
                 // Отображение кнопки "Назад"
                 service.sendBackToSheltersButton2(chatId);
 
+                break;
+
+            case "sendUserInfo":
+                // Кнопка отправки контакта
+                shelterId = callbackData.replace("sendUserInfo_", "");
+
+                Keyboard keyboard = new ReplyKeyboardMarkup(
+                        new KeyboardButton[]{
+                                new KeyboardButton("Отправить данные").requestContact(true),
+                        }
+
+                );
+                telegramBot.execute(new SendMessage(chatId, "Для отправки данных нажми кнопку.")
+                        .replyMarkup(keyboard));
                 break;
 
             default:
