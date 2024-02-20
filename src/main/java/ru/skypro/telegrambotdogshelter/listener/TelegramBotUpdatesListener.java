@@ -3,22 +3,14 @@ package ru.skypro.telegrambotdogshelter.listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
-import com.pengrad.telegrambot.model.request.Keyboard;
-import com.pengrad.telegrambot.model.request.KeyboardButton;
-import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
-import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.botMenu.BotManagementService;
-import ru.skypro.telegrambotdogshelter.services.impl.UsersContactInfoServiceImpl;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
-import ru.skypro.telegrambotdogshelter.services.interfaces.UsersContactInfoService;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 
 
 /**
@@ -32,6 +24,7 @@ public class TelegramBotUpdatesListener {
     private final TelegramBot telegramBot;
 
     private final ShelterService shelterService;
+    final  Long targetChatId = -4197641181L;
 
     // Экземпляр BotManagementService для обработки обновлений и отправки сообщений
     private final BotManagementService service;
@@ -39,8 +32,6 @@ public class TelegramBotUpdatesListener {
 
     // Логгер
     private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
-    // Экземпляр класса UsersContactInfoService для работы с данными пользователей
-    private final UsersContactInfoService userService;
 
     /**
      * Метод, вызываемый после создания экземпляра класса. Устанавливает слушателя обновлений бота.
@@ -75,13 +66,9 @@ public class TelegramBotUpdatesListener {
             // Отправка пользователю меню с приютами
             service.sendSheltersMenu(update.message().chat().id());
             service.sendSheltersMenu4(update.message().chat().id());
-        } else if (update.message().contact() != null) {
-
-            userService.saveUserInfo(update);
         }
-
-
     }
+
 
 
     /**
@@ -92,6 +79,7 @@ public class TelegramBotUpdatesListener {
      */
     private void handleCallbackData(Update update, String callbackData, Long chatId) {
         String shelterId;
+
 
         // Разделяем строку callbackData по символу '_' и берем первый элемент (индекс 0),
         // который представляет собой тип действия пользователя.
@@ -104,6 +92,7 @@ public class TelegramBotUpdatesListener {
                 // Отображение меню с информацией о приюте
                 shelterId = callbackData.replace("showShelterInfo_", "");
                 service.sendShelterInfoMenu(chatId, Long.parseLong(shelterId));
+//                service.sendBackToSheltersButton2(chatId);
                 break;
             case "info":
                 // Отображение текстовой информации о приюте
@@ -111,6 +100,18 @@ public class TelegramBotUpdatesListener {
                 service.sendShelterInfoText(chatId, Long.parseLong(shelterId));
                 // Отображение кнопки "Назад"
                 service.sendBackToSheltersButton2(chatId);
+                break;
+            case "about":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("about_", "");
+                service.sendShelterInformMenu(chatId, Long.parseLong(shelterId));
+                // Отображение кнопки "Назад"
+//                service.sendBackToSheltersButton2(chatId);
+                break;
+            case "consultationPotentialOwnerOfShelterAnimal":
+                // Отображение текстовой информации о консультации с потенциальным хозяином животного
+                shelterId = callbackData.replace("consultationPotentialOwnerOfShelterAnimal", "");
+                service.sendConsultationMenu(chatId);
                 break;
             case "takePet":
                 // Отображение информации о том, как взять животное из приюта
@@ -126,6 +127,111 @@ public class TelegramBotUpdatesListener {
                 service.sendBackToSheltersButton2(chatId);
                 break;
 
+            case "contactForPass":
+                // Отображение информации о контактных данные охраны для оформления пропуска
+                shelterId = callbackData.replace("contactForPass_", "");
+                service.sendShelterContactForPass(chatId, Long.parseLong(shelterId));
+                service.sendBackToSheltersButton2(chatId);
+                break;
+            case "recommendationTB":
+                // Отображение информации о технике безопасности на территории приюта
+                shelterId = callbackData.replace("recommendationTB_", "");
+                service.sendShelterRecommendationTB(chatId, Long.parseLong(shelterId));
+                service.sendBackToSheltersButton2(chatId);
+                break;
+            case "introduceRules":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("introduceRules", "");
+                service.sendIntroduceRules(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+            case "documentList":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("documentList", "");
+                service.sendDocumentList(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+            case "listTransportationRecommendations":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("listTransportationRecommendations", "");
+                service.sendListTransportationRecommendations(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+            case "listRecommendationsForHomePuppy":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("listRecommendationsForHomePuppy", "");
+                service.sendListRecommendationsForHomePuppy(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+            case "listRecommendationsForHomeAdultAnimal":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("listRecommendationsForHomeAdultAnimal", "");
+                service.sendListRecommendationsForHomeAdultAnimal(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+
+            case "listRecommendationsForHomeAnimalWithDisabilities":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("listRecommendationsForHomeAnimalWithDisabilities", "");
+                service.sendListRecommendationsForHomeAnimalWithDisabilities(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+
+            case "sendReportForm":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("sendReportForm", "");
+                service.sendReportForm(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+
+            case "adviceFromDogHandler":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("adviceFromDogHandler", "");
+                service.sendAdviceFromDogHandler(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+
+            case "recommendationsTrustedDogHandlers":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("recommendationsTrustedDogHandlers", "");
+                service.sendRecommendationsTrustedDogHandlers(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+
+            case "listReasonsForRefusal":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("listReasonsForRefusal", "");
+                service.sendListReasonsForRefusal(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+
+//             case "listOfAnimalsForAdoption":
+//                 // Отображение текстовой информации о приюте
+//                 shelterId = callbackData.replace("listOfAnimalsForAdoption", "");
+//                 service.sendListOfAnimalsForAdoption(chatId);
+//                 // Отображение кнопки "Назад"
+//                 service.sendBackToConsultationMenu(chatId);
+//                 break;
+
+            case "listAnimals":
+
+                shelterId = callbackData.replace("listAnimals_", "");
+                service.sendListOfAnimals(chatId, Long.parseLong(shelterId));
+                service.processUserRequest2(chatId);
+                service.sendBackToSheltersButton2(chatId);
+               break;
+
+
             case "backToShelters":
                 // Возвращение к списку приютов
                 shelterId = callbackData.replace("backToShelters", "");
@@ -136,37 +242,26 @@ public class TelegramBotUpdatesListener {
                 try {
                     String shelterIdStr = callbackData.substring("backToShelters".length());
                     long parsedShelterId = Long.parseLong(shelterIdStr);
-                    service.sendShelterInfoMenu(chatId, parsedShelterId);
+                    service.sendShelterInformMenu(chatId, parsedShelterId);
                 } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
                     // Обработка ошибок парсинга shelterId или выхода за пределы строки
                     logger.error("Error parsing shelterId from callbackData: {}", callbackData, e);
                 }
                 break;
 
-            case "callVolunteer":
-                final Long targetChatId = -4197641181L;
+            case "backToConsultationMenu":
+                // Возвращение к меню консультации
+                service.sendConsultationMenu(chatId);
+                break;
 
+            case "callVolunteer":
+
+//                Вызов волонтера и переход в чат с волонтерами
                 service.processUserRequest(chatId, targetChatId);
                 // Отображение кнопки "Назад"
                 service.sendBackToSheltersButton2(chatId);
 
-
                 break;
-
-            case "sendUserInfo":
-                // Кнопка отправки контакта
-                shelterId = callbackData.replace("sendUserInfo_", "");
-
-                Keyboard keyboard = new ReplyKeyboardMarkup(
-                        new KeyboardButton[]{
-                                new KeyboardButton("Отправить данные").requestContact(true),
-                        }
-
-                );
-                telegramBot.execute(new SendMessage(chatId, "Для отправки данных нажми кнопку.")
-                        .replyMarkup(keyboard));
-                break;
-
 
             default:
                 break;

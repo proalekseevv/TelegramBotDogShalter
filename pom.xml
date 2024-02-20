@@ -14,7 +14,7 @@
     <name>telegramBotDogShelter</name>
     <description>telegramBotDogShelter</description>
     <properties>
-        <Validator.Ver>6.0.13.Final</Validator.Ver>
+
         <java.version>17</java.version>
     </properties>
     <dependencies>
@@ -38,16 +38,15 @@
 
 
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${Validator.Ver}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.28</version>
-            <scope>provided</scope>
+
         </dependency>
 
         <dependency>
@@ -55,10 +54,7 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+
 
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -71,11 +67,7 @@
             <artifactId>liquibase-core</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
+
 
 
 
@@ -85,14 +77,14 @@
             <scope>test</scope>
         </dependency>
 
+
+
         <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.3</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
+
     </dependencies>
 
 

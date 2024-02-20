@@ -15,6 +15,8 @@ public class ShelterInfoMapper {
         shelterInfoDto.setEmail(shelterInfo.getEmail());
         shelterInfoDto.setInfoPets(shelterInfo.getInfoPets());
         shelterInfoDto.setWorkSchedule(shelterInfo.getWorkSchedule());
+        shelterInfoDto.setContactForPass(shelterInfo.getContactForPass());
+        shelterInfoDto.setRecommendationTB(shelterInfo.getRecommendationTB());
         return shelterInfoDto;
     }
 
@@ -28,6 +30,8 @@ public class ShelterInfoMapper {
         shelterInfo.setEmail(shelterInfoDto.getEmail());
         shelterInfo.setInfoPets(shelterInfoDto.getInfoPets());
         shelterInfo.setWorkSchedule(shelterInfoDto.getWorkSchedule());
+        shelterInfo.setContactForPass(shelterInfoDto.getContactForPass());
+        shelterInfo.setRecommendationTB(shelterInfoDto.getRecommendationTB());
         return shelterInfo;
     }
 }
