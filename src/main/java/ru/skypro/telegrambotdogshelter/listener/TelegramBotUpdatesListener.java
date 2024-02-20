@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.botMenu.BotManagementService;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
 import ru.skypro.telegrambotdogshelter.services.interfaces.UsersContactInfoService;
-
 import javax.annotation.PostConstruct;
 
 
@@ -91,6 +90,7 @@ public class TelegramBotUpdatesListener {
     private void handleCallbackData(Update update, String callbackData, Long chatId) {
         String shelterId;
 
+
         // Разделяем строку callbackData по символу '_' и берем первый элемент (индекс 0),
         // который представляет собой тип действия пользователя.
         /*
@@ -102,6 +102,7 @@ public class TelegramBotUpdatesListener {
                 // Отображение меню с информацией о приюте
                 shelterId = callbackData.replace("showShelterInfo_", "");
                 service.sendShelterInfoMenu(chatId, Long.parseLong(shelterId));
+//                service.sendBackToSheltersButton2(chatId);
                 break;
             case "info":
                 // Отображение текстовой информации о приюте
@@ -177,21 +178,6 @@ public class TelegramBotUpdatesListener {
                 telegramBot.execute(new SendMessage(chatId, "Для отправки данных нажми кнопку.")
                         .replyMarkup(keyboard));
                 break;
-
-//            case "sendUserInfo":
-//                // Кнопка отправки контакта
-//                shelterId = callbackData.replace("sendUserInfo_", "");
-//
-//                Keyboard keyboard = new ReplyKeyboardMarkup(
-//                        new KeyboardButton[]{
-//                                new KeyboardButton("Отправить данные").requestContact(true),
-//                        }
-//
-//                );
-//                telegramBot.execute(new SendMessage(chatId, "Для отправки данных нажми кнопку.")
-//                        .replyMarkup(keyboard));
-//                break;
-
 
             default:
                 break;
