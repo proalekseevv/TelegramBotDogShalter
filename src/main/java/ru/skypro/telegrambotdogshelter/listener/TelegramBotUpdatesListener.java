@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.botMenu.BotManagementService;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
 import ru.skypro.telegrambotdogshelter.services.interfaces.UsersContactInfoService;
+
 import javax.annotation.PostConstruct;
 
 
@@ -76,8 +77,6 @@ public class TelegramBotUpdatesListener {
 
             userService.saveUserInfo(update);}
     }
-
-
 
 
 
@@ -156,27 +155,12 @@ public class TelegramBotUpdatesListener {
                 break;
 
             case "callVolunteer":
-                final  Long targetChatId = -4197641181L;
 
 //                Вызов волонтера и переход в чат с волонтерами
                 service.processUserRequest(chatId, targetChatId);
                 // Отображение кнопки "Назад"
                 service.sendBackToSheltersButton2(chatId);
 
-                break;
-
-            case "sendUserInfo":
-                // Кнопка отправки контакта
-                shelterId = callbackData.replace("sendUserInfo_", "");
-
-                Keyboard keyboard = new ReplyKeyboardMarkup(
-                        new KeyboardButton[]{
-                                new KeyboardButton("Отправить данные").requestContact(true),
-                        }
-
-                );
-                telegramBot.execute(new SendMessage(chatId, "Для отправки данных нажми кнопку.")
-                        .replyMarkup(keyboard));
                 break;
 
             default:
