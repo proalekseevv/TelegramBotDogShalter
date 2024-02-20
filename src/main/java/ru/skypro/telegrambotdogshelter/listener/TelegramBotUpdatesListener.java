@@ -163,6 +163,20 @@ public class TelegramBotUpdatesListener {
 
                 break;
 
+            case "sendUserInfo":
+                // Кнопка отправки контакта
+                shelterId = callbackData.replace("sendUserInfo_", "");
+
+                Keyboard keyboard = new ReplyKeyboardMarkup(
+                        new KeyboardButton[]{
+                                new KeyboardButton("Отправить данные").requestContact(true),
+                        }
+
+                );
+                telegramBot.execute(new SendMessage(chatId, "Для отправки данных нажми кнопку.")
+                        .replyMarkup(keyboard));
+                break;
+
             default:
                 break;
         }
