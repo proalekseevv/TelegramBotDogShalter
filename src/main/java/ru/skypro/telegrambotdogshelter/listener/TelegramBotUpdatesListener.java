@@ -78,7 +78,7 @@ public class TelegramBotUpdatesListener {
             userService.saveUserInfo(update);}
     }
 
-    }
+
 
 
     /**
@@ -89,8 +89,6 @@ public class TelegramBotUpdatesListener {
      */
     private void handleCallbackData(Update update, String callbackData, Long chatId) {
         String shelterId;
-
-
         // Разделяем строку callbackData по символу '_' и берем первый элемент (индекс 0),
         // который представляет собой тип действия пользователя.
         /*
@@ -234,13 +232,12 @@ public class TelegramBotUpdatesListener {
 //                 break;
 
             case "listAnimals":
-
+                // Отображение информации о животных для усыновления
                 shelterId = callbackData.replace("listAnimals_", "");
                 service.sendListOfAnimals(chatId, Long.parseLong(shelterId));
                 service.processUserRequest2(chatId);
                 service.sendBackToSheltersButton2(chatId);
                break;
-
 
             case "backToShelters":
                 // Возвращение к списку приютов

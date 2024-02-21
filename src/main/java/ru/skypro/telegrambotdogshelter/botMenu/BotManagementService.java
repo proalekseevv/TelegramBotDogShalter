@@ -84,10 +84,9 @@ public class BotManagementService {
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Узнать информацию о приюте").callbackData("info_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Как взять животное из приюта").callbackData("takePet_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Расписание работы приюта, адрес и схема проезда").callbackData("workSchedule_" + shelterInfo.getId()));
-
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Контактные данные охраны для оформления пропуска").callbackData("contactForPass_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Общие рекомендации о технике безопасности на территории приюта").callbackData("recommendationTB_" + shelterInfo.getId()));
-        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Отправить контактные данные").callbackData("sendUserInfo_" + shelterInfo.getId()));
+
 
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
         // Отправка сообщения с клавиатурой
@@ -134,9 +133,7 @@ public class BotManagementService {
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("О приюте").callbackData("about_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Консультация с потенциальным хозяином животного").callbackData("consultationPotentialOwnerOfShelterAnimal"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("sendReport_" + shelterInfo.getId()));
-
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список животных для усыновления").callbackData("listAnimals_"+shelterInfo.getId()));
-
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Позвать волонтера").callbackData("callVolunteer"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
 
@@ -168,7 +165,12 @@ public class BotManagementService {
             telegramBot.execute(new SendMessage(chatId, "Извините, информация о приюте недоступна."));
         }
     }
-
+    /**
+     * Метод для отправки текстового сообщения с информацией о расписание работы приюта.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     * @param shelterId Идентификатор приюта, информацию о котором нужно отправить.
+     */
 
     /**
      * Метод для отправки кнопки "Назад" в меню приютов (часть 1).
@@ -246,17 +248,14 @@ public class BotManagementService {
 
 
     public void processUserRequest(Long chatId, Long volunteerChatId) {
-
         button(chatId);
-
         logger.info("Отправляем пользователю ссылку на подключение к боту");
-
         callVolunteer(volunteerChatId);
     }
 
     public void processUserRequest2(Long chatId) {
-
         button(chatId);
+        logger.info("Отправляем пользователю ссылку на подключение к чату с волонтерами");
 
         logger.info("Отправляем пользователю ссылку на подключение к боту");
 
