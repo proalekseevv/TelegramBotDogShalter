@@ -14,17 +14,18 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users_contact_info")
+@ToString
+@Table(name = "users_contact_info", schema = "bot")
 @Entity
 public class UsersContactInformation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
 
 
     @Column(name = "chat_id")
-    private long chatId;
+    private Long chatId;
 
     @Column(name = "name")
     private String name;
@@ -32,25 +33,14 @@ public class UsersContactInformation {
     @Column(name = "surname")
     private String surname;
 
-    @Column(name = "age")
-    private int age;
+
 
     @Column(name = "phone")
-    private long phoneNumber;
-
-    @Column(name = "email")
-    private String email;
+    private Long phoneNumber;
 
 
-    public UsersContactInformation(long chatId, String name, String surname, int age, long phoneNumber, String email) {
-        this.chatId = chatId;
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.age = age;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-    }
+
+
 
 }
 

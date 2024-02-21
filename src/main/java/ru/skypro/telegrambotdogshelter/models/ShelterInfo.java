@@ -45,6 +45,14 @@ public class ShelterInfo {
     @Type(type = "org.hibernate.type.TextType")
     private String workSchedule;
 
+    @Column(name = "contact_for_pass", nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
+    private String contactForPass;
+
+    @Column(name = "recommendation_tb", nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
+    private String recommendationTB;
+
 
 //    public String getWorkSchedule() {
 //        return workSchedule;
