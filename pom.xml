@@ -14,7 +14,7 @@
     <name>telegramBotDogShelter</name>
     <description>telegramBotDogShelter</description>
     <properties>
-        <Validator.Ver>6.0.13.Final</Validator.Ver>
+
         <java.version>17</java.version>
     </properties>
     <dependencies>
@@ -71,11 +71,7 @@
             <artifactId>liquibase-core</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
+
 
 
 
@@ -100,6 +96,7 @@
             <version>1.6.3</version>
         </dependency>
 
+>>>>>>>>> Temporary merge branch 2
     </dependencies>
 
 

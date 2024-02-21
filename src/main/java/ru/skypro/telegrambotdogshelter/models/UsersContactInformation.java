@@ -1,10 +1,12 @@
 package ru.skypro.telegrambotdogshelter.models;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.stereotype.Component;
-import javax.persistence.*;
+import ru.skypro.telegrambotdogshelter.models.DTO.Animal;
 
+import javax.persistence.*;
+import java.util.Collection;
 
 @Component
 @EqualsAndHashCode(exclude = "id")
@@ -35,6 +37,7 @@ public class UsersContactInformation {
 
     @Column(name = "phone")
     private Long phoneNumber;
+
 
 
 

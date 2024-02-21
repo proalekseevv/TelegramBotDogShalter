@@ -78,6 +78,7 @@ public class TelegramBotUpdatesListener {
             userService.saveUserInfo(update);}
     }
 
+    }
 
 
     /**
@@ -110,6 +111,18 @@ public class TelegramBotUpdatesListener {
                 // Отображение кнопки "Назад"
                 service.sendBackToSheltersButton2(chatId);
                 break;
+            case "about":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("about_", "");
+                service.sendShelterInformMenu(chatId, Long.parseLong(shelterId));
+                // Отображение кнопки "Назад"
+//                service.sendBackToSheltersButton2(chatId);
+                break;
+            case "consultationPotentialOwnerOfShelterAnimal":
+                // Отображение текстовой информации о консультации с потенциальным хозяином животного
+                shelterId = callbackData.replace("consultationPotentialOwnerOfShelterAnimal", "");
+                service.sendConsultationMenu(chatId);
+                break;
             case "takePet":
                 // Отображение информации о том, как взять животное из приюта
                 shelterId = callbackData.replace("takePet_", "");
@@ -123,6 +136,103 @@ public class TelegramBotUpdatesListener {
                 service.sendShelterWorkScheduleText(chatId, Long.parseLong(shelterId));
                 service.sendBackToSheltersButton2(chatId);
                 break;
+
+            case "contactForPass":
+                // Отображение информации о контактных данные охраны для оформления пропуска
+                shelterId = callbackData.replace("contactForPass_", "");
+                service.sendShelterContactForPass(chatId, Long.parseLong(shelterId));
+                service.sendBackToSheltersButton2(chatId);
+                break;
+            case "recommendationTB":
+                // Отображение информации о технике безопасности на территории приюта
+                shelterId = callbackData.replace("recommendationTB_", "");
+                service.sendShelterRecommendationTB(chatId, Long.parseLong(shelterId));
+                service.sendBackToSheltersButton2(chatId);
+                break;
+            case "introduceRules":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("introduceRules", "");
+                service.sendIntroduceRules(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+            case "documentList":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("documentList", "");
+                service.sendDocumentList(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+            case "listTransportationRecommendations":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("listTransportationRecommendations", "");
+                service.sendListTransportationRecommendations(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+            case "listRecommendationsForHomePuppy":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("listRecommendationsForHomePuppy", "");
+                service.sendListRecommendationsForHomePuppy(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+            case "listRecommendationsForHomeAdultAnimal":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("listRecommendationsForHomeAdultAnimal", "");
+                service.sendListRecommendationsForHomeAdultAnimal(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+
+            case "listRecommendationsForHomeAnimalWithDisabilities":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("listRecommendationsForHomeAnimalWithDisabilities", "");
+                service.sendListRecommendationsForHomeAnimalWithDisabilities(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+
+            case "sendReportForm":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("sendReportForm", "");
+                service.sendReportForm(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+
+            case "adviceFromDogHandler":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("adviceFromDogHandler", "");
+                service.sendAdviceFromDogHandler(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+
+            case "recommendationsTrustedDogHandlers":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("recommendationsTrustedDogHandlers", "");
+                service.sendRecommendationsTrustedDogHandlers(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+
+            case "listReasonsForRefusal":
+                // Отображение текстовой информации о приюте
+                shelterId = callbackData.replace("listReasonsForRefusal", "");
+                service.sendListReasonsForRefusal(chatId);
+                // Отображение кнопки "Назад"
+                service.sendBackToConsultationMenu(chatId);
+                break;
+
+//             case "listOfAnimalsForAdoption":
+//                 // Отображение текстовой информации о приюте
+//                 shelterId = callbackData.replace("listOfAnimalsForAdoption", "");
+//                 service.sendListOfAnimalsForAdoption(chatId);
+//                 // Отображение кнопки "Назад"
+//                 service.sendBackToConsultationMenu(chatId);
+//                 break;
+
             case "listAnimals":
 
                 shelterId = callbackData.replace("listAnimals_", "");
@@ -154,6 +264,8 @@ public class TelegramBotUpdatesListener {
                 service.sendConsultationMenu(chatId);
                 break;
 
+
+
             case "callVolunteer":
 
 //                Вызов волонтера и переход в чат с волонтерами
@@ -176,6 +288,7 @@ public class TelegramBotUpdatesListener {
                 telegramBot.execute(new SendMessage(chatId, "Для отправки данных нажми кнопку.")
                         .replyMarkup(keyboard));
                 break;
+
 
             default:
                 break;
