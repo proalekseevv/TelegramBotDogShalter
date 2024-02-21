@@ -261,8 +261,6 @@ public class TelegramBotUpdatesListener {
                 service.sendConsultationMenu(chatId);
                 break;
 
-
-
             case "callVolunteer":
 
 //                Вызов волонтера и переход в чат с волонтерами
