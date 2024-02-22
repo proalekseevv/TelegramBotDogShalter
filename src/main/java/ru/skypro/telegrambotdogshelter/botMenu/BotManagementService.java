@@ -72,7 +72,6 @@ public class BotManagementService {
      * @param chatId    Идентификатор чата, куда отправляется сообщение.
      * @param shelterId Идентификатор приюта, информацию о котором нужно отправить.
      */
-
     public void sendShelterInformMenu(Long chatId, long shelterId) {
         ShelterInfoDto shelterInfo = shelterInfoService.read(shelterId);
 
@@ -84,7 +83,6 @@ public class BotManagementService {
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Узнать информацию о приюте").callbackData("info_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Как взять животное из приюта").callbackData("takePet_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Расписание работы приюта, адрес и схема проезда").callbackData("workSchedule_" + shelterInfo.getId()));
-
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Контактные данные охраны для оформления пропуска").callbackData("contactForPass_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Общие рекомендации о технике безопасности на территории приюта").callbackData("recommendationTB_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Отправить контактные данные").callbackData("sendUserInfo_" + shelterInfo.getId()));
@@ -93,8 +91,13 @@ public class BotManagementService {
         // Отправка сообщения с клавиатурой
         telegramBot.execute(new SendMessage(chatId, infoON)
                 .replyMarkup(inlineKeyboardMarkup));
-//        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
     }
+
+    /**
+     * Метод для отправки меню консультации потенциального владельца животного.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendConsultationMenu(Long chatId) {
 //        ShelterInfoDto shelterInfo = shelterInfoService.read(shelterId);
 
@@ -103,7 +106,6 @@ public class BotManagementService {
 
         // Создание клавиатуры с кнопками
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-//         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список животных для усыновления").callbackData("listOfAnimalsForAdoption_"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Правила знакомства с животным").callbackData("introduceRules"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список документов, необходимых для того, чтобы взять животное из приюта").callbackData("documentList" ));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список рекомендаций по транспортировке животного").callbackData("listTransportationRecommendations"));
@@ -119,9 +121,13 @@ public class BotManagementService {
         // Отправка сообщения с клавиатурой
         telegramBot.execute(new SendMessage(chatId, infoON)
                 .replyMarkup(inlineKeyboardMarkup));
-//        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
     }
 
+    /**
+     * Метод для отправки меню для потенциального владельца животного.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendShelterInfoMenu(Long chatId, long shelterId) {
         ShelterInfoDto shelterInfo = shelterInfoService.read(shelterId);
 
@@ -134,18 +140,13 @@ public class BotManagementService {
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("О приюте").callbackData("about_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Консультация с потенциальным хозяином животного").callbackData("consultationPotentialOwnerOfShelterAnimal"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("sendReport_" + shelterInfo.getId()));
-
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список животных для усыновления").callbackData("listAnimals_"+shelterInfo.getId()));
-
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Позвать волонтера").callbackData("callVolunteer"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
 
         // Отправка сообщения с клавиатурой
         telegramBot.execute(new SendMessage(chatId, infoON)
                 .replyMarkup(inlineKeyboardMarkup));
-
-        // Добавление кнопки "Назад" или подобной, чтобы вернуться к списку приютов
-//        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
     }
 
     /**
@@ -193,6 +194,12 @@ public class BotManagementService {
 
         telegramBot.execute(new SendMessage(chatId, "Вернуться:").replyMarkup(inlineKeyboardMarkup));
     }
+
+    /**
+     * Метод для отправки кнопки "Назад" в меню консультации.
+     *
+     * @param chatId Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendBackToConsultationMenu(Long chatId) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToConsultationMenu"));
@@ -293,6 +300,12 @@ public class BotManagementService {
 
         telegramBot.execute(message);
     }
+
+    /**
+     * Метод для отправки Расписание работы приюта, адреса и схемы проезда.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendShelterWorkScheduleText(Long chatId, long shelterId) {
         try {
             ShelterInfoDto shelterInfo = shelterInfoService.read(shelterId);
@@ -326,6 +339,12 @@ public class BotManagementService {
                     .append("\n");}
         telegramBot.execute(new SendMessage(chatId, response.toString()));
     }
+
+    /**
+     * Метод для отправки контактных данных охраны для оформления пропуска.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendShelterContactForPass(Long chatId, long shelterId) {
         try {
             ShelterInfoDto shelterInfo = shelterInfoService.read(shelterId);
@@ -340,6 +359,12 @@ public class BotManagementService {
             telegramBot.execute(new SendMessage(chatId, "Извините, информация о приюте недоступна."));
         }
     }
+
+    /**
+     * Метод для отправки общих рекомендаций о технике безопасности на территории приюта.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendShelterRecommendationTB(Long chatId, long shelterId) {
         try {
             ShelterInfoDto shelterInfo = shelterInfoService.read(shelterId);
@@ -354,36 +379,78 @@ public class BotManagementService {
             telegramBot.execute(new SendMessage(chatId, "Извините, информация о приюте недоступна."));
         }
     }
+
+    /**
+     * Метод для отправки правил знакомства с животным.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendIntroduceRules(Long chatId) {
             // Отправка сообщения с информацией
             telegramBot.execute(new SendMessage(chatId,
                     "Правила знакомства с животным: " + Const.INTRODUCE_RULES));
     }
+
+    /**
+     * Метод для отправки списка документов, необходимых для того, чтобы взять животное из приюта.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendDocumentList(Long chatId) {
         // Отправка сообщения с информацией
         telegramBot.execute(new SendMessage(chatId,
                 "Список документов: " + Const.DOCUMENT_LIST));
     }
+
+    /**
+     * Метод для отправки списка рекомендаций по транспортировке животного.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendListTransportationRecommendations(Long chatId) {
         // Отправка сообщения с информацией
         telegramBot.execute(new SendMessage(chatId,
                 "Список рекомендаций по транспортировке животного: " + Const.LIST_TRANSPORTATION_RECOMMENDATIONS));
     }
+
+    /**
+     * Метод для отправки списка рекомендаций по обустройству дома для щенка.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendListRecommendationsForHomePuppy(Long chatId) {
         // Отправка сообщения с информацией
         telegramBot.execute(new SendMessage(chatId,
                 "Список рекомендаций по обустройству дома для щенка: " + Const.LIST_RECOMMENDATIONS_FOR_ARRANGING_HOME_FOR_PUPPY));
     }
+
+    /**
+     * Метод для отправки списка рекомендаций по обустройству дома для взрослого животного.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendListRecommendationsForHomeAdultAnimal(Long chatId) {
         // Отправка сообщения с информацией
         telegramBot.execute(new SendMessage(chatId,
                 "Список рекомендаций по обустройству дома для взрослого животного: " + Const.LIST_RECOMMENDATIONS_FOR_ARRANGING_HOME_FOR_ADULT_ANIMAL));
     }
+
+    /**
+     * Метод для отправки списка рекомендаций по обустройству дома для животного с ограниченными возможностями (зрение, передвижение).
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendListRecommendationsForHomeAnimalWithDisabilities(Long chatId) {
         // Отправка сообщения с информацией
         telegramBot.execute(new SendMessage(chatId,
                 "Список рекомендаций по обустройству дома для животного с ограниченными возможностями (зрение, передвижение): " + Const.LIST_RECOMMENDATIONS_FOR_ARRANGING_HOME_FOR_ANIMAL_WITH_DISABILITIES));
     }
+
+    /**
+     * Метод для отправки формы ежедневного отчета.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendReportForm(Long chatId) {
 //         Отправка сообщения с информацией
         telegramBot.execute(new SendMessage(chatId,
@@ -391,41 +458,38 @@ public class BotManagementService {
         telegramBot.execute(new SendMessage(chatId, Const.DAILY_REPORT_FORM));
 //        telegramBot.execute(new SendDocument(chatId, Const.DAILY_REPORT_FORM));
     }
+
+    /**
+     * Метод для отправки советов кинолога по первичному общению с собакой.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendAdviceFromDogHandler(Long chatId) {
         // Отправка сообщения с информацией
         telegramBot.execute(new SendMessage(chatId,
                 "Советы кинолога по первичному общению с собакой: " + Const.ADVICE_FROM_DOG_HANDLER_ON_INITIAL_COMMUNICATION_WITH_DOG));
     }
+
+    /**
+     * Метод для отправки рекомендаций по проверенным кинологам для дальнейшего обращения к ним.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendRecommendationsTrustedDogHandlers(Long chatId) {
         // Отправка сообщения с информацией
         telegramBot.execute(new SendMessage(chatId,
                 "Рекомендации по проверенным кинологам для дальнейшего обращения к ним: " + Const.RECOMMENDATIONS_TRUSTED_DOG_HANDLERS));
     }
+
+    /**
+     * Метод для отправки списка причин, почему могут отказать и не дать забрать собаку из приюта.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     */
     public void sendListReasonsForRefusal(Long chatId) {
         // Отправка сообщения с информацией
         telegramBot.execute(new SendMessage(chatId,
                 "Список причин, почему могут отказать и не дать забрать собаку из приюта: " + Const.LIST_REASONS_FOR_REFUSAL));
     }
-//     public void sendListOfAnimalsForAdoption(Long chatId) {
-        // Отправка сообщения с информацией
-//        telegramBot.execute(new SendMessage(chatId,
-//                "Правила знакомства с животным: " + Const.INTRODUCE_RULES));
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
