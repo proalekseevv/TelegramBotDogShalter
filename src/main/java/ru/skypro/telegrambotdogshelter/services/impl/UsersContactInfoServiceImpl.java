@@ -44,9 +44,16 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
     }
 
 //    @Override
+
+    /**
+     * Метод для обработки отправленных контактных данных от пользователя.
+     *
+     * @param update Объект обновления бота, содержащий информацию о действиях пользователя.
+     */
     public void saveUserInfo(Update update) {
         logger.info("Запущена обработка контактных данных.");
 
+        // Сбор информации о пользователе из отправленного по кнопке: имя, фамилия и телефон
         long chatId = update.message().chat().id();
 
         String userName = update.message().contact().firstName();
@@ -67,8 +74,7 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
                     "Ваши данные успешно записаны."));
             service.sendBackToSheltersButton2(chatId);
 
-        } else
-        {
+        } else {
             telegramBot.execute(new SendMessage(chatId,
                     "Такой пользователь уже записан."));
             service.sendBackToSheltersButton2(chatId);

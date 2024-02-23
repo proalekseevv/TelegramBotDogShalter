@@ -29,7 +29,7 @@ public class TelegramBotUpdatesListener {
     private final TelegramBot telegramBot;
 
     private final ShelterService shelterService;
-    final  Long targetChatId = -4197641181L;
+    final Long targetChatId = -4197641181L;
 
     // Экземпляр BotManagementService для обработки обновлений и отправки сообщений
     private final BotManagementService service;
@@ -73,11 +73,12 @@ public class TelegramBotUpdatesListener {
             service.sendSheltersMenu(update.message().chat().id());
             service.sendSheltersMenu4(update.message().chat().id());
         }
+        // Проверка, содержится ли в обновлении отправленный контакт пользователя
         else if (update.message().contact() != null) {
-
-            userService.saveUserInfo(update);}
+            // если да, то запускается метод для сохранения этих данных в БД
+            userService.saveUserInfo(update);
+        }
     }
-
 
 
     /**
@@ -238,7 +239,7 @@ public class TelegramBotUpdatesListener {
                 service.sendListOfAnimals(chatId, Long.parseLong(shelterId));
                 service.processUserRequest2(chatId);
                 service.sendBackToSheltersButton2(chatId);
-               break;
+                break;
 
 
             case "backToShelters":
