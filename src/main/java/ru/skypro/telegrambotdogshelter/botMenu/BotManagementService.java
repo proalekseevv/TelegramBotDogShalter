@@ -92,6 +92,7 @@ public class BotManagementService {
         // Отправка сообщения с клавиатурой
         telegramBot.execute(new SendMessage(chatId, infoON)
                 .replyMarkup(inlineKeyboardMarkup));
+//        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
     }
 
     /**
@@ -122,6 +123,7 @@ public class BotManagementService {
         // Отправка сообщения с клавиатурой
         telegramBot.execute(new SendMessage(chatId, infoON)
                 .replyMarkup(inlineKeyboardMarkup));
+//        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
     }
 
     /**
@@ -142,6 +144,8 @@ public class BotManagementService {
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Консультация с потенциальным хозяином животного").callbackData("consultationPotentialOwnerOfShelterAnimal"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("sendReport_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список животных для усыновления").callbackData("listAnimals_"+shelterInfo.getId()));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Отправить контактные данные").callbackData("sendUserInfo_" + shelterInfo.getId()));
+
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Позвать волонтера").callbackData("callVolunteer"));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
 
