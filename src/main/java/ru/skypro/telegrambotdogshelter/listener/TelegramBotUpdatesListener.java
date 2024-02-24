@@ -29,7 +29,11 @@ public class TelegramBotUpdatesListener {
     private final TelegramBot telegramBot;
 
     private final ShelterService shelterService;
-    final Long targetChatId = -4197641181L;
+
+    // ID чата с волонтером
+    final  Long targetChatId = -4197641181L;
+
+
 
     // Экземпляр BotManagementService для обработки обновлений и отправки сообщений
     private final BotManagementService service;
@@ -89,8 +93,6 @@ public class TelegramBotUpdatesListener {
      */
     private void handleCallbackData(Update update, String callbackData, Long chatId) {
         String shelterId;
-
-
         // Разделяем строку callbackData по символу '_' и берем первый элемент (индекс 0),
         // который представляет собой тип действия пользователя.
         /*
@@ -234,13 +236,12 @@ public class TelegramBotUpdatesListener {
 //                 break;
 
             case "listAnimals":
-
+                // Отображение информации о животных для усыновления
                 shelterId = callbackData.replace("listAnimals_", "");
                 service.sendListOfAnimals(chatId, Long.parseLong(shelterId));
                 service.processUserRequest2(chatId);
                 service.sendBackToSheltersButton2(chatId);
                 break;
-
 
             case "backToShelters":
                 // Возвращение к списку приютов
@@ -286,6 +287,7 @@ public class TelegramBotUpdatesListener {
                 telegramBot.execute(new SendMessage(chatId, "Для отправки данных нажми кнопку.")
                         .replyMarkup(keyboard));
                 break;
+
 
             default:
                 break;
