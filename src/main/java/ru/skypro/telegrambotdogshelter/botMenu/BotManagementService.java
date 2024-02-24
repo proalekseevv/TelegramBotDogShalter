@@ -87,6 +87,7 @@ public class BotManagementService {
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Общие рекомендации о технике безопасности на территории приюта").callbackData("recommendationTB_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Отправить контактные данные").callbackData("sendUserInfo_" + shelterInfo.getId()));
 
+
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
         // Отправка сообщения с клавиатурой
         telegramBot.execute(new SendMessage(chatId, infoON)
@@ -224,8 +225,6 @@ public class BotManagementService {
 
     }
 
-
-
     public void sendSheltersMenu4(Long chatId) {
         List<ShelterDto> shelters = shelterService.getAll();
 
@@ -243,64 +242,59 @@ public class BotManagementService {
         logger.info("SendSheltersMenu response: {}", response);
     }
 
-
-
     public void sendBackToSheltersButton3(Long chatId) {
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Меню приюта").callbackData("show"));
 
-
         telegramBot.execute(new SendMessage(chatId, "Открыть:").replyMarkup(inlineKeyboardMarkup));
     }
 
 
-
+    /** Ксения
+     * Метод для отправки пользователю ссылку на чат с волонтерами и уведомление волонтеру о подключении к нему пользователя.
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     * @param volunteerChatId Идентификатор чата с волонтерами.
+     */
     public void processUserRequest(Long chatId, Long volunteerChatId) {
         button(chatId);
         logger.info("Отправляем пользователю ссылку на подключение к боту");
         callVolunteer(volunteerChatId);
     }
 
+    /** Ксения
+     * Метод для отправки пользователю ссылку на чат с волонтерами без уведомления волонтера о подключении к нему пользователя.
+     * @param chatId Идентификатор чата, куда отправляется сообщение.
+     */
     public void processUserRequest2(Long chatId) {
         button(chatId);
         logger.info("Отправляем пользователю ссылку на подключение к чату с волонтерами");
-
-        logger.info("Отправляем пользователю ссылку на подключение к боту");
-
     }
 
-
-
-
-        private static Keyboard keyboardMarkup (Long chatId) {
-            final String url = "https://t.me/+aptCEg65ORBhYzk6";
-            InlineKeyboardButton button = new InlineKeyboardButton("Ссылка на чат с волонтером");
-            button.url(url);
-            InlineKeyboardMarkup markup = new InlineKeyboardMarkup(button);
-            return markup;
-    }
+    /** Ксения
+     * Метод для уведомления волонтера о подключении к нему пользователя.
+     * @param targetChatId   Идентификатор чата с волонтерами.
+     */
 
     public void callVolunteer(Long targetChatId) {
-
         SendMessage request = new SendMessage(targetChatId, "Внимание! К тебе подключается пользователь");
         telegramBot.execute(request);
         logger.info("Отправка волонтеру сообщения о присоединении нового пользователя ");
     }
 
-
+    /** Ксения
+     * Метод по реализации кнопки "Вызов волонтера".
+     * @param chatId   Идентификатор чата с волонтерами.
+     */
     public void button(Long chatId) {
-
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
                 new InlineKeyboardButton[]{
                         new InlineKeyboardButton("Перейти в чат с волонтером").url("https://t.me/+aptCEg65ORBhYzk6")
                 }
         );
-
         SendMessage message = new SendMessage(chatId, " Вызвать волонтера");
         message.replyMarkup(markup);
-
         telegramBot.execute(message);
     }
 
@@ -326,6 +320,12 @@ public class BotManagementService {
         }
 
     }
+
+    /**
+     * Метод для отправки списка животных в приюте.
+     * @param chatId  Идентификатор чата, куда отправляется сообщение.
+     * @param shelterId  Идентификатор приюта из которого необходимо взять список животных.
+     */
 
     public void sendListOfAnimals(Long chatId, long shelterId) {
         Collection<Animal> animals = animalService.getAnimalsByShelterId(shelterId);

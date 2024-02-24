@@ -1,3 +1,5 @@
+--Kseniia
+--Создание таблицы с животными
 
 CREATE TABLE IF NOT EXISTS bot.animal (
   animal_id BIGINT NOT NULL,

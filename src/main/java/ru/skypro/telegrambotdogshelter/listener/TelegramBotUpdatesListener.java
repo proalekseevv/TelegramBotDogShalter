@@ -29,6 +29,7 @@ public class TelegramBotUpdatesListener {
     private final TelegramBot telegramBot;
 
     private final ShelterService shelterService;
+    // ID чата с волонтером
     final  Long targetChatId = -4197641181L;
 
     // Экземпляр BotManagementService для обработки обновлений и отправки сообщений
@@ -77,9 +78,6 @@ public class TelegramBotUpdatesListener {
 
             userService.saveUserInfo(update);}
     }
-
-
-
 
     /**
      * Метод обработки данных callback и выполнения соответствующих действий.

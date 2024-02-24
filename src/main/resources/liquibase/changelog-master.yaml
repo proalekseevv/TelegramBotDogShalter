@@ -26,5 +26,9 @@ databaseChangeLog:
       relativeToChangeLogFile: true
       file: sql/animals-info.sql
 
+  - include:
+      relativeToChangeLogFile: true
+      file: sql/animals-add-pets.sql
+
 
 
