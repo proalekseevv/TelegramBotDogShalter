@@ -28,7 +28,9 @@ databaseChangeLog:
 
   - include:
       relativeToChangeLogFile: true
-      file: sql/pet-owners.sql
+      file: sql/animal-owners.sql
+
+
 
 
 

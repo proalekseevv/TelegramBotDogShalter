@@ -1,24 +1,18 @@
 package ru.skypro.telegrambotdogshelter.models;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 
 @Entity
 @Table(name = "info", schema = "bot")
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode (exclude = "shelter")
 public class ShelterInfo {
 
     @Id
@@ -41,18 +35,21 @@ public class ShelterInfo {
     @Type(type = "org.hibernate.type.TextType")
     private String infoPets;
 
-    @Column(name = "work_schedule", nullable = false)
+    @Column(name = "work_schedule")
     @Type(type = "org.hibernate.type.TextType")
     private String workSchedule;
 
-    @Column(name = "contact_for_pass", nullable = false)
+    @Column(name = "contact_for_pass")
     @Type(type = "org.hibernate.type.TextType")
     private String contactForPass;
 
-    @Column(name = "recommendation_tb", nullable = false)
+    @Column(name = "recommendation_tb")
     @Type(type = "org.hibernate.type.TextType")
     private String recommendationTB;
 
+    @OneToOne (cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn (name = "shelter_id")
+        private Shelter shelter;
 
 //    public String getWorkSchedule() {
 //        return workSchedule;
@@ -62,16 +59,5 @@ public class ShelterInfo {
 //        this.info = info;
 //    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ShelterInfo that = (ShelterInfo) o;
-        return Objects.equals(id, that.id) && Objects.equals(info, that.info) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(email, that.email) && Objects.equals(infoPets, that.infoPets);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, info, phoneNumber, email, infoPets);
-    }
 }
