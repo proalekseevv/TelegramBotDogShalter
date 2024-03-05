@@ -2,6 +2,9 @@ package ru.skypro.telegrambotdogshelter.listener;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.Document;
+import com.pengrad.telegrambot.model.Message;
+import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
@@ -12,10 +15,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.botMenu.BotManagementService;
+import ru.skypro.telegrambotdogshelter.models.Report;
+import ru.skypro.telegrambotdogshelter.repository.ReportRepository;
+import ru.skypro.telegrambotdogshelter.services.Const;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
-import ru.skypro.telegrambotdogshelter.services.interfaces.UsersContactInfoService;
+import ru.skypro.telegrambotdogshelter.services.interfaces.UsersService;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 
 /**
@@ -28,6 +44,8 @@ public class TelegramBotUpdatesListener {
     // Экземпляр TelegramBot для взаимодействия с ботом
     private final TelegramBot telegramBot;
 
+
+
     private final ShelterService shelterService;
 
     // ID чата с волонтером
@@ -35,9 +53,12 @@ public class TelegramBotUpdatesListener {
 
 
 
+
     // Экземпляр BotManagementService для обработки обновлений и отправки сообщений
     private final BotManagementService service;
-    private final UsersContactInfoService userService;
+    private final UsersService userService;
+
+    private final ReportRepository reportRepository;
 
 
     // Логгер
@@ -54,6 +75,7 @@ public class TelegramBotUpdatesListener {
         });
     }
 
+
     /**
      * Метод для обработки обновления бота.
      *
@@ -63,24 +85,33 @@ public class TelegramBotUpdatesListener {
         // Запись информации об обновлении в лог
         logger.info("Processing update: {}", update);
 
-        // Проверка, является ли обновление результатом нажатия на кнопку встроенной клавиатуры
         if (update.callbackQuery() != null) {
-            // Получение данных из callbackQuery
             String callbackData = update.callbackQuery().data();
-            // Получение идентификатора чата
             Long chatId = update.callbackQuery().message().chat().id();
-            // Обработка данных и идентификатора чата
             handleCallbackData(update, callbackData, chatId);
-        } else if (update.message() != null && "/start".equals(update.message().text())) {
-            // Обработка команды /start
-            // Отправка пользователю меню с приютами
-            service.sendSheltersMenu(update.message().chat().id());
-            service.sendSheltersMenu4(update.message().chat().id());
-        }
-        // Проверка, содержится ли в обновлении отправленный контакт пользователя
-        else if (update.message().contact() != null) {
-            // если да, то запускается метод для сохранения этих данных в БД
-            userService.saveUserInfo(update);
+        } else if (update.message() != null) {
+            // Проверяем, является ли сообщение командой /start
+            if ("/start".equals(update.message().text())) {
+                Long chatId = update.message().chat().id();
+                service.sendSheltersMenu(chatId);
+                service.sendSheltersMenu4(chatId);
+            } else if (update.message().contact() != null) {
+                userService.saveUserInfo(update);
+            } else if (update.message().document() != null) {
+                // Обработка полученного документа
+                Long chatId = update.message().chat().id();
+                // Получаем fileId документа
+                String documentFileId = update.message().document().fileId();
+                // Получаем информацию о приюте, к которому относится документ
+                // Здесь нужно добавить вашу логику для получения shelterId
+                Long shelterId = 1L; // Пример
+                // Сохраняем документ в базе данных
+                service.saveDocumentToDatabase(documentFileId, chatId, shelterId);
+                // Отправляем пользователю сообщение о успешном сохранении документа
+                telegramBot.execute(new SendMessage(chatId, "Документ успешно сохранен."));
+            }
+
+
         }
     }
 
@@ -124,6 +155,8 @@ public class TelegramBotUpdatesListener {
                 // Отображение текстовой информации о консультации с потенциальным хозяином животного
                 shelterId = callbackData.replace("consultationPotentialOwnerOfShelterAnimal", "");
                 service.sendConsultationMenu(chatId);
+
+//
                 break;
             case "takePet":
                 // Отображение информации о том, как взять животное из приюта
@@ -227,14 +260,6 @@ public class TelegramBotUpdatesListener {
                 service.sendBackToConsultationMenu(chatId);
                 break;
 
-//             case "listOfAnimalsForAdoption":
-//                 // Отображение текстовой информации о приюте
-//                 shelterId = callbackData.replace("listOfAnimalsForAdoption", "");
-//                 service.sendListOfAnimalsForAdoption(chatId);
-//                 // Отображение кнопки "Назад"
-//                 service.sendBackToConsultationMenu(chatId);
-//                 break;
-
             case "listAnimals":
                 // Отображение информации о животных для усыновления
                 shelterId = callbackData.replace("listAnimals_", "");
@@ -287,13 +312,37 @@ public class TelegramBotUpdatesListener {
                 telegramBot.execute(new SendMessage(chatId, "Для отправки данных нажми кнопку.")
                         .replyMarkup(keyboard));
                 break;
+            case "report":
+                if (callbackData.length() > "report".length()) {
+                    // Извлечение идентификатора приюта из callback_data
+                    String shelterIdStr = callbackData.replaceAll("\\D", ""); // Удалить все нецифровые символы
+                    try {
+                        // Преобразование строки в число
+                        long parsedShelterId = Long.parseLong(shelterIdStr);
+                        // Отправляем пользователю сообщение с просьбой отправить фотографию
+                        telegramBot.execute(new SendMessage(chatId, "Пожалуйста, скачайте документ для отчета : " + Const.REPORT_URL + " после заполнения, загрузите файл в чат."));
+
+                        // Сохраняем данные для последующего сохранения фотографии в базе данных
+                        //  service.saveUserReportInfo(chatId, parsedShelterId);
+                        logger.info("Requested user to send a photo for report. Chat ID: {}, Shelter ID: {}", chatId, parsedShelterId);
+                    } catch (NumberFormatException e) {
+                        // Обработка ошибок парсинга идентификатора приюта
+                        logger.error("Error parsing shelterId from callbackData: {}", callbackData, e);
+                    }
+                } else {
+                    logger.error("No shelter ID provided in callback_data for report");
+                }
+                break;
+
+
+
 
 
             default:
                 break;
         }
-    }
 
+    }
 
     //callbackQuery() -
     //это метод в библиотеке Telegram Bot API (Pengrad Telegram Bot API), который предоставляет доступ к объекту CallbackQuery в обновлении бота.

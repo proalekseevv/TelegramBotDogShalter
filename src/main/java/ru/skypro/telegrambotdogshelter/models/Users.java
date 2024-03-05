@@ -1,12 +1,9 @@
 package ru.skypro.telegrambotdogshelter.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.stereotype.Component;
-import ru.skypro.telegrambotdogshelter.models.DTO.Animal;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Component
 @EqualsAndHashCode(exclude = "id")
@@ -17,7 +14,7 @@ import java.util.Collection;
 @ToString
 @Table(name = "users_contact_info", schema = "bot")
 @Entity
-public class UsersContactInformation {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
