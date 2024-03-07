@@ -1,9 +1,8 @@
 package ru.skypro.telegrambotdogshelter.botMenu;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
-import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
-import com.pengrad.telegrambot.model.request.Keyboard;
+import com.pengrad.telegrambot.model.request.*;
+import com.pengrad.telegrambot.request.SendChatAction;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import com.pengrad.telegrambot.response.SendResponse;
@@ -11,17 +10,27 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.skypro.telegrambotdogshelter.exceptions.ShelterIsNotExistsException;
 import ru.skypro.telegrambotdogshelter.models.DTO.Animal;
 import ru.skypro.telegrambotdogshelter.models.DTO.ShelterDto;
 import ru.skypro.telegrambotdogshelter.models.DTO.ShelterInfoDto;
+import ru.skypro.telegrambotdogshelter.models.Report;
+import ru.skypro.telegrambotdogshelter.repository.ReportRepository;
 import ru.skypro.telegrambotdogshelter.services.Const;
 import ru.skypro.telegrambotdogshelter.services.interfaces.AnimalService;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterInfoService;
 import ru.skypro.telegrambotdogshelter.services.interfaces.ShelterService;
 
+
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+
 
 /**
  * Класс BotManagementService представляет собой сервис для управления ботом Telegram, включая отправку сообщений и формирование клавиатур.
@@ -38,6 +47,8 @@ public class BotManagementService {
 
     private final ShelterService shelterService;
     private final AnimalService animalService;
+
+    private final ReportRepository reportRepository;
 
     // Логгер
     private final Logger logger = LoggerFactory.getLogger(BotManagementService.class);
@@ -86,6 +97,8 @@ public class BotManagementService {
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Контактные данные охраны для оформления пропуска").callbackData("contactForPass_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Общие рекомендации о технике безопасности на территории приюта").callbackData("recommendationTB_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Отправить контактные данные").callbackData("sendUserInfo_" + shelterInfo.getId()));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("report_" + shelterInfo.getId()));
+
 
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
         // Отправка сообщения с клавиатурой
@@ -141,11 +154,11 @@ public class BotManagementService {
 
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("О приюте").callbackData("about_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Консультация с потенциальным хозяином животного").callbackData("consultationPotentialOwnerOfShelterAnimal"));
-        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("sendReport_" + shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список животных для усыновления").callbackData("listAnimals_"+shelterInfo.getId()));
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Отправить контактные данные").callbackData("sendUserInfo_" + shelterInfo.getId()));
-
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Позвать волонтера").callbackData("callVolunteer"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Прислать отчет о питомце").callbackData("report_" + shelterInfo.getId()));
+
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Назад").callbackData("backToShelters"));
 
         // Отправка сообщения с клавиатурой
@@ -173,7 +186,12 @@ public class BotManagementService {
             telegramBot.execute(new SendMessage(chatId, "Извините, информация о приюте недоступна."));
         }
     }
-
+    /**
+     * Метод для отправки текстового сообщения с информацией о расписание работы приюта.
+     *
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     * @param shelterId Идентификатор приюта, информацию о котором нужно отправить.
+     */
 
     /**
      * Метод для отправки кнопки "Назад" в меню приютов (часть 1).
@@ -217,12 +235,11 @@ public class BotManagementService {
      * @param chatId Идентификатор чата, куда отправляется сообщение.
      */
     public void sendSheltersMenu(Long chatId) {
+
         // Отправка приветственного сообщения
         SendResponse response2 = telegramBot.execute(new SendMessage(chatId, "Привет! Я помогаю взаимодействовать с приютами для собачек"));
 
     }
-
-
 
     public void sendSheltersMenu4(Long chatId) {
         List<ShelterDto> shelters = shelterService.getAll();
@@ -241,67 +258,59 @@ public class BotManagementService {
         logger.info("SendSheltersMenu response: {}", response);
     }
 
-
-
     public void sendBackToSheltersButton3(Long chatId) {
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Меню приюта").callbackData("show"));
 
-
         telegramBot.execute(new SendMessage(chatId, "Открыть:").replyMarkup(inlineKeyboardMarkup));
     }
 
 
-
+    /** Ксения
+     * Метод для отправки пользователю ссылку на чат с волонтерами и уведомление волонтеру о подключении к нему пользователя.
+     * @param chatId    Идентификатор чата, куда отправляется сообщение.
+     * @param volunteerChatId Идентификатор чата с волонтерами.
+     */
     public void processUserRequest(Long chatId, Long volunteerChatId) {
-
         button(chatId);
-
         logger.info("Отправляем пользователю ссылку на подключение к боту");
-
         callVolunteer(volunteerChatId);
     }
 
+    /** Ксения
+     * Метод для отправки пользователю ссылку на чат с волонтерами без уведомления волонтера о подключении к нему пользователя.
+     * @param chatId Идентификатор чата, куда отправляется сообщение.
+     */
     public void processUserRequest2(Long chatId) {
-
         button(chatId);
-
-        logger.info("Отправляем пользователю ссылку на подключение к боту");
-
+        logger.info("Отправляем пользователю ссылку на подключение к чату с волонтерами");
     }
 
-
-
-
-        private static Keyboard keyboardMarkup (Long chatId) {
-            final String url = "https://t.me/+aptCEg65ORBhYzk6";
-            InlineKeyboardButton button = new InlineKeyboardButton("Ссылка на чат с волонтером");
-            button.url(url);
-            InlineKeyboardMarkup markup = new InlineKeyboardMarkup(button);
-            return markup;
-    }
+    /** Ксения
+     * Метод для уведомления волонтера о подключении к нему пользователя.
+     * @param targetChatId   Идентификатор чата с волонтерами.
+     */
 
     public void callVolunteer(Long targetChatId) {
-
         SendMessage request = new SendMessage(targetChatId, "Внимание! К тебе подключается пользователь");
         telegramBot.execute(request);
         logger.info("Отправка волонтеру сообщения о присоединении нового пользователя ");
     }
 
-
+    /** Ксения
+     * Метод по реализации кнопки "Вызов волонтера".
+     * @param chatId   Идентификатор чата с волонтерами.
+     */
     public void button(Long chatId) {
-
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(
                 new InlineKeyboardButton[]{
                         new InlineKeyboardButton("Перейти в чат с волонтером").url("https://t.me/+aptCEg65ORBhYzk6")
                 }
         );
-
         SendMessage message = new SendMessage(chatId, " Вызвать волонтера");
         message.replyMarkup(markup);
-
         telegramBot.execute(message);
     }
 
@@ -327,6 +336,12 @@ public class BotManagementService {
         }
 
     }
+
+    /**
+     * Метод для отправки списка животных в приюте.
+     * @param chatId  Идентификатор чата, куда отправляется сообщение.
+     * @param shelterId  Идентификатор приюта из которого необходимо взять список животных.
+     */
 
     public void sendListOfAnimals(Long chatId, long shelterId) {
         Collection<Animal> animals = animalService.getAnimalsByShelterId(shelterId);
@@ -495,5 +510,75 @@ public class BotManagementService {
         telegramBot.execute(new SendMessage(chatId,
                 "Список причин, почему могут отказать и не дать забрать собаку из приюта: " + Const.LIST_REASONS_FOR_REFUSAL));
     }
+
+
+    //Запасной
+
+    public void sendReportURL(Long chatId) {
+
+       telegramBot.execute(new SendMessage(chatId,
+              "Cсылка на скачивание отчета: " + Const.REPORT_URL));
+    }
+
+
+
+    //Запасной
+    public void saveUserReportInfo(Long chatId, Long shelterId) {
+        Report report = new Report();
+        report.setChatId(chatId);
+        report.setShelterId(shelterId);
+        reportRepository.save(report);
+    }
+
+
+    //Запасной
+    private static final String BOT_TOKEN = "6701581241:AAHk1_yziH9RypjrMglo70RxDp97Af3li9I";
+
+
+    //Запасной
+    public void savePhotoToDatabase(String fileId, Long chatId, Long shelterId) {
+
+            // Сохранение информации о загруженном изображении в базе данных
+            Report report = new Report();
+            report.setChatId(chatId);
+            report.setShelterId(shelterId);
+            reportRepository.save(report);
+    }
+
+    /**
+     * Метод для отправки документа полученного от пользователя приюта в базу данных.
+     *
+     * @param chatId  Идентификатор чата, куда отправляется сообщение.
+     */
+    public void saveDocumentToDatabase(String fileId, Long chatId, Long shelterId) {
+        // Создаем новый объект отчета
+        Report report = new Report();
+        report.setChatId(chatId);
+        report.setShelterId(shelterId);
+
+        // Проверяем, что fileId не null перед установкой в объект Report
+        if (fileId != null) {
+            report.setPhotoFileId(fileId); // Устанавливаем идентификатор файла документа
+        }
+
+        if (report.getCreationDateTime() == null) {
+            report.setCreationDateTime(LocalDateTime.now());
+        }
+
+        // Сохраняем отчет в базу данных
+        reportRepository.save(report);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }
 

@@ -42,4 +42,7 @@ public class Const {
             = "Общие рекомендации о технике безопасности на территории приюта";
     public static final String RECOMMENDATIONS_TRUSTED_DOG_HANDLERS
             = "Рекомендации по проверенным кинологам для дальнейшего обращения к ним";
+
+    public static final String REPORT_URL
+            = "https://ppt.ru/fls/97469/forma-otchet-rabotnika-o-prodelannoy-rabote.rtf?ysclid=lsn5y81x28175636152";
 }

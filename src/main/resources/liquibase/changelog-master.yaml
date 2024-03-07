@@ -28,8 +28,13 @@ databaseChangeLog:
 
   - include:
       relativeToChangeLogFile: true
+
       file: sql/animal-owners.sql
 
+
+- include:
+      relativeToChangeLogFile: true
+      file: sql/animals-add-pets.sql
 
 
 

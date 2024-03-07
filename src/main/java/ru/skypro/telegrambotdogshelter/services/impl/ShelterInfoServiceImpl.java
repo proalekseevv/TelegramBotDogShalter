@@ -21,19 +21,13 @@ public class ShelterInfoServiceImpl implements ShelterInfoService {
     private final ShelterInfoDao shelterInfoDao;
     private final ShelterInfoRepository repository;
     private final ShelterInfoMapper shelterInfoMapper;
-
-
     private Logger logger = LoggerFactory.getLogger(ShelterInfoServiceImpl.class);
-
-
-
 
     @Override
     public List<ShelterInfoDto> getAllInfo() {
         List<ShelterInfo> shelterInfo = shelterInfoDao.getAllInfo();
         return  repository.findAll().stream().map(shelterInfoMapper::toShelterInfoDto).collect(Collectors.toList());
     }
-
 
     @Override
     public ShelterInfoDto read(Long id) {
@@ -97,7 +91,4 @@ public class ShelterInfoServiceImpl implements ShelterInfoService {
         repository.delete(shelterInfo);
         return shelterInfoMapper.toShelterInfoDto(shelterInfo);
     }
-
-
-
 }

@@ -10,32 +10,32 @@ import org.springframework.stereotype.Service;
 import ru.skypro.telegrambotdogshelter.botMenu.BotManagementService;
 import ru.skypro.telegrambotdogshelter.exceptions.UserIdNotFoundException;
 import ru.skypro.telegrambotdogshelter.repository.ShelterRepository;
-import ru.skypro.telegrambotdogshelter.repository.UsersContactInfoRepository;
-import ru.skypro.telegrambotdogshelter.services.interfaces.UsersContactInfoService;
-import ru.skypro.telegrambotdogshelter.models.UsersContactInformation;
+import ru.skypro.telegrambotdogshelter.repository.UsersRepository;
+import ru.skypro.telegrambotdogshelter.services.interfaces.UsersService;
+import ru.skypro.telegrambotdogshelter.models.Users;
 
 
 @Service
 @RequiredArgsConstructor
-public class UsersContactInfoServiceImpl implements UsersContactInfoService {
+public class UsersServiceImpl implements UsersService {
 
-    Logger logger = LoggerFactory.getLogger(UsersContactInfoService.class);
+    Logger logger = LoggerFactory.getLogger(UsersService.class);
 
-    private final UsersContactInfoRepository userContactInformationRepository;
+    private final UsersRepository userContactInformationRepository;
     private final ShelterRepository shelterRepository;
-    private final UsersContactInformation usersContactInformation;
+    private final Users users;
     private final TelegramBot telegramBot;
     private final BotManagementService service;
 
 
     @Override
-    public UsersContactInformation createUserService(UsersContactInformation usersContactInformation) {
+    public Users createUserService(Users users) {
         logger.info("Was invoked method for create userContactInformation");
-        return userContactInformationRepository.save(usersContactInformation);
+        return userContactInformationRepository.save(users);
     }
 
     @Override
-    public UsersContactInformation readUserServiceById(long id) {
+    public Users readUserServiceById(long id) {
         if (!userContactInformationRepository.existsById(id))
             logger.error("Пользователь c id {} не найден", id);
         return userContactInformationRepository.findById(id)
@@ -64,7 +64,7 @@ public class UsersContactInfoServiceImpl implements UsersContactInfoService {
         Long userPhoneLong = Long.parseLong(userPhoneNumber);
 
         // Сохранение данных контакта в БД
-        UsersContactInformation newUser = new UsersContactInformation(null,
+        Users newUser = new Users(null,
                 chatId, userName, userSurname, userPhoneLong);
 
         if (userContactInformationRepository.existByPhoneNumber(userPhoneLong) == null) {
