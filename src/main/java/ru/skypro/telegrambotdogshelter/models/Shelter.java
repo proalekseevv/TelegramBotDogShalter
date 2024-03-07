@@ -28,11 +28,11 @@ public class Shelter {
 
 
     @Column(name = "name", nullable = false)
-    @Type(type = "org.hibernate.type.TextType")
     private String name;
 
     @OneToMany(mappedBy = "shelter")
-    @JsonIgnore private Collection<Animal> animals;
+    @JsonIgnore
+    private Collection<Animal> animals;
 
     public Long getId() {
         return id;
